@@ -1,0 +1,8 @@
+D:\CureUniversity\CureUniveristy\DLL\bin\Debug\DLL.dll
+D:\CureUniversity\CureUniveristy\DLL\bin\Debug\DLL.pdb
+D:\CureUniversity\CureUniveristy\DLL\bin\Debug\Classes.dll
+D:\CureUniversity\CureUniveristy\DLL\bin\Debug\Classes.pdb
+D:\CureUniversity\CureUniveristy\DLL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\CureUniversity\CureUniveristy\DLL\obj\Debug\DAL.csproj.CopyComplete
+D:\CureUniversity\CureUniveristy\DLL\obj\Debug\DLL.dll
+D:\CureUniversity\CureUniveristy\DLL\obj\Debug\DLL.pdb

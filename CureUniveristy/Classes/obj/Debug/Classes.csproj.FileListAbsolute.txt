@@ -1,0 +1,5 @@
+D:\CureUniversity\CureUniveristy\Classes\bin\Debug\Classes.dll
+D:\CureUniversity\CureUniveristy\Classes\bin\Debug\Classes.pdb
+D:\CureUniversity\CureUniveristy\Classes\obj\Debug\Classes.csprojAssemblyReference.cache
+D:\CureUniversity\CureUniveristy\Classes\obj\Debug\Classes.dll
+D:\CureUniversity\CureUniveristy\Classes\obj\Debug\Classes.pdb

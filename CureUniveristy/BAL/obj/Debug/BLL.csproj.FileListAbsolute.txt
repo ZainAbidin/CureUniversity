@@ -1,0 +1,10 @@
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\BAL.dll
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\BAL.pdb
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\Classes.dll
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\DLL.dll
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\Classes.pdb
+D:\CureUniversity\CureUniveristy\BAL\bin\Debug\DLL.pdb
+D:\CureUniversity\CureUniveristy\BAL\obj\Debug\BLL.csprojAssemblyReference.cache
+D:\CureUniversity\CureUniveristy\BAL\obj\Debug\BLL.csproj.CopyComplete
+D:\CureUniversity\CureUniveristy\BAL\obj\Debug\BAL.dll
+D:\CureUniversity\CureUniveristy\BAL\obj\Debug\BAL.pdb
