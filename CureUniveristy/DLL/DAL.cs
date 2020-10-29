@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using Classes;
 
 namespace DAL
 {
     public class Dal
     {
         string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+
         public int LogIn(string email, string password)
         {
             using (SqlConnection con = new SqlConnection(CS))
@@ -50,7 +52,7 @@ namespace DAL
 
         }
 
-        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber)
+        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
 
             using (SqlConnection con = new SqlConnection(CS))
@@ -64,26 +66,28 @@ namespace DAL
                 cmnd.Parameters.AddWithValue("@SchoolId", schoolId);
                 cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
                 cmnd.Parameters.AddWithValue("@Password", password);
+                cmnd.Parameters.AddWithValue("@Username", userName);
                 con.Open();
-                int returnvar = 1;
+
                 string userExistenceCheck = Convert.ToString(cmnd.ExecuteScalar());
                 if (!string.IsNullOrEmpty(userExistenceCheck))
                 {
                     if (userExistenceCheck.Equals("0"))
                     {
-                        returnvar = 0;
+                        return 0;
                     }
                     else
                     {
-                        returnvar = 1;
+                        return 1;
                     }
 
                 }
-                return returnvar;
+                return 1;
 
             }
 
 
         }
+
     }
 }

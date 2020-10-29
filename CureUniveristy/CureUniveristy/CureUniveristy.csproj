@@ -159,6 +159,7 @@
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Login_Page.css" />
     <Content Include="Signup_Page.aspx" />
+    <Content Include="Signup_Page.css" />
     <Content Include="Site.Master" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />

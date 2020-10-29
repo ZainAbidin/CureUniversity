@@ -15,9 +15,9 @@ namespace BLL
             return DllObj.LogIn(email, passwrod);
         }
 
-        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber)
+        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
-            return DllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber);
+            return DllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
         }
     }
 }

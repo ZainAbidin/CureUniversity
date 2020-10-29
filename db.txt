@@ -1,0 +1,115 @@
+USE [Cure_University]
+GO
+
+/****** Object:  Table [dbo].[Employees]    Script Date: 10/28/2020 2:38:40 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Users](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[School_ID] [int],
+	[First_Name] [nvarchar](20) NULL,
+	[Last_Name] [nvarchar](20) NULL,
+	[Adress] [nvarchar](80) NULL,
+	[Email] [nvarchar] (50) NULL,
+	[Contact_Number] [varchar](12) NULL,
+ CONSTRAINT [PK_Employees] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+ALTER TABLE Users
+ADD Username VARCHAR(40)
+ALTER TABLE Users
+ADD PRIMARY KEY(ID)
+
+CREATE TABLE Roles (Email VARCHAR(40), [Role] VARCHAR(10), [Password] VARCHAR(10))
+
+
+
+
+CREATE OR ALTER PROCEDURE spCheckCredentials
+@Email VARCHAR(40),
+@Password VARCHAR(10)
+AS
+BEGIN
+	SELECT [Role] FROM Roles WHERE (Email=@Email AND [Password]=@Password)
+END
+
+EXEC VerifyUser 1582,'asdfzxc'
+
+
+CREATE OR ALTER PROCEDURE spstudentSignup
+@Email VARCHAR(40),
+@FirstName VARCHAR(20),
+@LastName VARCHAR(20),
+@Address VARCHAR(80),
+@SchoolId INT,
+@Contact_Number VARCHAR(12),
+@Password VARCHAR(20),
+@Username VARCHAR(40)
+AS
+DECLARE @ResultValue int 
+
+If(SELECT 1 FROM Users WHERE Email = @Email) > 0
+BEGIN
+	SET  @ResultValue = 0
+END
+ELSE
+BEGIN
+	INSERT INTO Users(School_ID,First_Name,Last_Name,Adress,Email,Contact_Number,Username)
+	VALUES (@SchoolId,@FirstName,@LastName,@Address,@Email,@Contact_Number,@Username)
+	INSERT INTO Roles(Email,[Role],[Password])
+	VALUES (@Email,'Student',@Password)
+	INSERT INTO COURSES(SchoolId,Course)
+	VALUES (@SchoolId,'')
+	SET  @ResultValue = 1
+END
+
+CREATE TABLE COURSES (SchoolId INT, Course VARCHAR(60))
+
+CREATE OR ALTER PROCEDURE spCourseRegister
+@SchoolId INT,
+@CourseName VARCHAR(20)
+AS
+DECLARE @RESULT INT
+BEGIN
+	IF((SELECT 1 FROM COURSES WHERE SchoolId = @SchoolId) > 0)
+	BEGIN
+	UPDATE COURSES SET Course = CONCAT(@CourseName,', ',Course) WHERE SchoolId = @SchoolId
+	SET @RESULT = 0
+	END
+	ELSE
+	BEGIN
+	INSERT INTO COURSES(SchoolId, Course)
+	VALUES (@SchoolId,@CourseName)
+	END
+END
+
+EXECUTE spCourseRegister 2585,'Calulus'
+
+SELECT *FROM Users
+SELECT *FROM [Roles]
+SELECT *FROM COURSES
+
+
+
+CREATE OR ALTER PROCEDURE spUpdateStudent
+@Username VARCHAR(40),
+@FirstName VARCHAR(20),
+@LastName VARCHAR(20),
+@ContactNumber VARCHAR(10),
+@Email VARCHAR(20),
+@Address VARCHAR(80)
+
+AS
+BEGIN
+	UPDATE Users SET First_Name = @FirstName, Last_Name = @LastName, Adress = @Address, Email = @Email, Contact_Number = @ContactNumber, Username=@Username WHERE EmployeeCode = @EmployeeCode 
+END

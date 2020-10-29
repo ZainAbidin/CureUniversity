@@ -8,7 +8,7 @@ namespace Classes
 {
     public class Users
     {
-        protected int ID { get; set; }
+        public int ID { get; set; }
         protected string firstName { get; set; }
         protected string lastName { get; set; }
         protected string address { get; set; }
@@ -19,15 +19,37 @@ namespace Classes
 
     public class Students : Users
     {
-       
+        public Students()
+        {
+            CourseList = new List<Course>();
+        }
+
+        List<Course> CourseList { get; set; }
+
+
     }
 
     public class Teacher : Users
     {
+        public Teacher()
+        {
+            CourseList = new List<Course>();
+        }
+
+        List<Course> CourseList { get; set; }
 
     }
 
     public class Admin : Users
+    {
+        public Admin()
+        {
+            
+        }
+
+    }
+
+    public class Course
     {
 
     }

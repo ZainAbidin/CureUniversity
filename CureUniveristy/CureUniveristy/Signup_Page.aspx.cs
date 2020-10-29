@@ -16,10 +16,10 @@ namespace CureUniveristy
 
         }
         [System.Web.Services.WebMethod(EnableSession = true)]
-        public static int Signup(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber)
+        public static int Signup(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
             Bll BllObj = new Bll();
-            return BllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber);
+            return BllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
         }
     }
 }
