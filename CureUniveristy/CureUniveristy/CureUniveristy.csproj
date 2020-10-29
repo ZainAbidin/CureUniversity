@@ -161,6 +161,7 @@
     <Content Include="Signup_Page.aspx" />
     <Content Include="Signup_Page.css" />
     <Content Include="Site.Master" />
+    <Content Include="Student_Page.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -221,6 +222,13 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Student_Page.aspx.cs">
+      <DependentUpon>Student_Page.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Student_Page.aspx.designer.cs">
+      <DependentUpon>Student_Page.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
