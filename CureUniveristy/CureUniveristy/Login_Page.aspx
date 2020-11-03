@@ -54,9 +54,13 @@
                     contentType: 'application/json',
                     dataType: 'json',
                     success: function (data) {
+
                         if (data.d == 0) {
-                            alert("Student");
-                            //window.location.href = "Employee Page.aspx?username=" + username;
+
+                            alert("into the success fuction of AJAX must redirect to the student page");
+                            window.location.href = "Student_Page.aspx?email=" + email;
+                            alert("wtf");
+
                         }
                         else if (data.d == 1) {
                             alert("Teacher");
@@ -64,7 +68,7 @@
                         }
                         else if (data.d == 2) {
                             alert("Admin");
-                            //alert("Wrong credentials or user not registered yet!")
+
                         }
                         else {
                             alert("Wrong credentials or user not registered yet!")
@@ -77,16 +81,20 @@
             });
         });
 
+        function redirect() {
+            //window.location.href = "Signup_Page.aspx";
+             window.location.href = "Student_Page.aspx?email=" + "zain@gmail.com";
+
+        }
 
     </script>
-
 </head>
 
 
 <body class="text-center">
-    <div style="float: left; width: 50%">
+    <%--    <div style="float: left; width: 50%">
         <img src="images/cover.png" />
-    </div>
+    </div>--%>
     <div style="width: 50%">
         <form class="form-signin">
             <h1 class="h3 mb-3 font-weight-normal">Please Login</h1>
@@ -96,7 +104,7 @@
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required />
             <button class="btn btn-lg btn-primary btn-block" id="btnSignin" type="submit">Login</button>
 
-            <button class="btn btn-sm" type="submit">Sign up</button>
+            <button class="btn btn-sm" id="btnSignUp" onclick="redirect()" type="submit">Sign up</button>
         </form>
     </div>
 </body>

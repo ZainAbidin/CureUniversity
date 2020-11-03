@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Classes;
 using DAL;
+using System.Collections.Generic;
+using System.Data;
 
 namespace BLL
 {
     public class Bll
     {
-        Dal DllObj = new Dal();
         public int LogIn(string email, string passwrod)
         {
-            return DllObj.LogIn(email, passwrod);
+            return (new Dal()).LogIn(email, passwrod);
         }
 
-        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
+        public bool SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
-            return DllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
+            return (new Dal()).SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
+        }
+
+        public DataTable GetEntityAgainstEmail(string email)
+        {
+            return (new Dal()).GetEntityAgainstEmail(email);
+        }
+
+        public List<Students> ViewStudents(string email)
+        {
+            return (new Dal()).GetStudents(email);
         }
     }
 }

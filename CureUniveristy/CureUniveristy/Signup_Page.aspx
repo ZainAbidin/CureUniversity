@@ -116,13 +116,13 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.d == 0) {
+                    if (data.d == false) {
 
 
                         alert("User Already registered");
 
                     }
-                    else if (data.d == 1)
+                    else if (data.d == true)
                         alert("User Registered");
 
                 },

@@ -9,11 +9,11 @@ namespace Classes
     public class Users
     {
         public int ID { get; set; }
-        protected string firstName { get; set; }
-        protected string lastName { get; set; }
-        protected string address { get; set; }
-        protected string email { get; set; }
-        protected string contactNumber { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string address { get; set; }
+        public string email { get; set; }
+        public string contactNumber { get; set; }
 
     }
 

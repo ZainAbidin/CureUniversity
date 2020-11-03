@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using BLL;
+﻿using BLL;
+using System;
+using System.Web.Services;
 
 namespace CureUniveristy
 {
@@ -15,11 +11,10 @@ namespace CureUniveristy
 
         }
 
-        [System.Web.Services.WebMethod(EnableSession = true)]
+        [WebMethod(EnableSession = true)]
         public static int CheckCredentials(string email, string password)
-        {
-            Bll BllObj = new Bll();
-            return BllObj.LogIn(email, password);
+        {            
+            return (new Bll()).LogIn(email, password);
         }
     }
    

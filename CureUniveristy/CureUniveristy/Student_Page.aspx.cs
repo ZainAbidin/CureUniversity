@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using BLL;
+using Classes;
+using System;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 
 namespace CureUniveristy
 {
@@ -12,6 +11,15 @@ namespace CureUniveristy
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+
+        [WebMethod(EnableSession = true)]
+
+        public static string GetStudents(string email)
+        {
+            Students students = new Students();
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            return js.Serialize((new Bll()).ViewStudents(email));
         }
     }
 }

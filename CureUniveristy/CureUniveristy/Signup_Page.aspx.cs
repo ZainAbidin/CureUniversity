@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using BLL;
+﻿using BLL;
+using System;
 
 namespace CureUniveristy
 {
@@ -16,10 +11,9 @@ namespace CureUniveristy
 
         }
         [System.Web.Services.WebMethod(EnableSession = true)]
-        public static int Signup(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
+        public static bool Signup(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
-            Bll BllObj = new Bll();
-            return BllObj.SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
+            return new Bll().SignUp(email, address, firstName, lastName, password, schoolId, contactNumber, userName);
         }
     }
 }

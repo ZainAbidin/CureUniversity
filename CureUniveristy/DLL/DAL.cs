@@ -1,31 +1,31 @@
-﻿using System;
+﻿using Classes;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
-using Classes;
 
 namespace DAL
 {
     public class Dal
     {
-        string CS = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+        string ConnectionString = ConfigurationManager.ConnectionStrings["CureUniversityConnectionString"].ConnectionString;
 
         public int LogIn(string email, string password)
         {
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmnd = new SqlCommand("spCheckCredentials", con);
+                SqlCommand cmnd = new SqlCommand("spCheckCredentials", connection);
+
                 cmnd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmnd.Parameters.AddWithValue("@Email", email);
                 cmnd.Parameters.AddWithValue("@Password", password);
-                con.Open();
+
+                connection.Open();
 
                 string role = Convert.ToString(cmnd.ExecuteScalar());
                 int returnvar = 0;
+
                 if (!string.IsNullOrEmpty(role))
                 {
                     if (role.Equals("Student"))
@@ -48,16 +48,14 @@ namespace DAL
                     return 3;
                 }
             }
-
-
         }
 
-        public int SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
+        public bool SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
-
-            using (SqlConnection con = new SqlConnection(CS))
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                SqlCommand cmnd = new SqlCommand("spstudentSignup", con);
+                SqlCommand cmnd = new SqlCommand("spstudentSignup", connection);
+
                 cmnd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmnd.Parameters.AddWithValue("@Email", email);
                 cmnd.Parameters.AddWithValue("@Address", address);
@@ -67,28 +65,63 @@ namespace DAL
                 cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
                 cmnd.Parameters.AddWithValue("@Password", password);
                 cmnd.Parameters.AddWithValue("@Username", userName);
-                con.Open();
+                connection.Open();
 
                 string userExistenceCheck = Convert.ToString(cmnd.ExecuteScalar());
+
                 if (!string.IsNullOrEmpty(userExistenceCheck))
                 {
                     if (userExistenceCheck.Equals("0"))
                     {
-                        return 0;
+                        return false; /////////user already exists
                     }
                     else
                     {
-                        return 1;
+                        return true; /////// NEW USER IS TO BE REGISTERED
                     }
-
                 }
-                return 1;
 
+                return false;
             }
-            Students stdobj = new Students();
-           
-
+        }
+        
+        public DataTable GetEntityAgainstEmail (string email)
+        {
+            using(SqlConnection con = new SqlConnection (ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spuserIdentify", con);
+                cmnd.Parameters.AddWithValue("@Email", email);
+                con.Open();
+                SqlDataAdapter da = new SqlDataAdapter(cmnd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                return dt;
+            }
         }
 
+        public List<Students> GetStudents(string email)
+        {
+            List<Students> students = new List<Students>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spuserIdentify", connection);
+                cmnd.Parameters.AddWithValue("@Email",email);
+                cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+                connection.Open();
+                SqlDataReader rdr = cmnd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Students student = new Students();
+                    student.ID = Convert.ToInt32(rdr["School_ID"]);
+                    student.firstName = rdr["First_Name"].ToString();
+                    student.lastName = rdr["Last_Name"].ToString();
+                    student.email = rdr["Email"].ToString();
+                    student.contactNumber = rdr["Contact_Number"].ToString();
+                    student.address = rdr["Adress"].ToString();
+                    students.Add(student);
+                }
+                return students;
+            }
+        }
     }
 }
