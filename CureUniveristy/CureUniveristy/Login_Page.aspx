@@ -13,7 +13,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://getbootstrap.com/docs/4.5/examples/sign-in/" />
     <link href="Login_Page.css" rel="stylesheet" type="text/css" />
-
+        <link href="Login_Page.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="Scripts/jquery-3.3.1.js"></script>
+    <script src="Scripts/jquery-3.3.1.min.js"></script>
 
     <style>
         .bd-placeholder-img {
@@ -32,10 +35,7 @@
         }
     </style>
 
-    <link href="Login_Page.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="Scripts/jquery-3.3.1.js"></script>
-    <script src="Scripts/jquery-3.3.1.min.js"></script>
+
 
     <script type="text/javascript">
 
@@ -83,7 +83,8 @@
 
         function redirect() {
             //window.location.href = "Signup_Page.aspx";
-             window.location.href = "Student_Page.aspx?email=" + "zain@gmail.com";
+            window.location.href = "Student_Page.aspx?email=" + "zain@gmail.com";
+            //window.location.href = "Teacher_Page.aspx?email=" + "z@gmail.com";
 
         }
 

@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Classes
 {
+    public class Course
+    {
+        public string name { get; set; }
+        public int creditHours { get; set; }
+        public string modeOfStudy { get; set; }
+
+    }
     public class Users
     {
         public int ID { get; set; }
@@ -44,13 +51,10 @@ namespace Classes
     {
         public Admin()
         {
-            
+
         }
 
     }
 
-    public class Course
-    {
 
-    }
 }

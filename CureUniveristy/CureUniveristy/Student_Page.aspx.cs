@@ -1,8 +1,8 @@
 ﻿using BLL;
-using Classes;
 using System;
 using System.Web.Script.Serialization;
 using System.Web.Services;
+using System.Web.UI.WebControls;
 
 namespace CureUniveristy
 {
@@ -14,12 +14,35 @@ namespace CureUniveristy
         }
 
         [WebMethod(EnableSession = true)]
-
-        public static string GetStudents(string email)
+        public static string GetStudentByID(string email)
         {
-            Students students = new Students();
             JavaScriptSerializer js = new JavaScriptSerializer();
-            return js.Serialize((new Bll()).ViewStudents(email));
+            return js.Serialize((new Bll()).GetStudentByID(email));
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static bool UpdateStudentProfile(string reference, string email, string address, string firstName, string lastName, string contactNumber, string userName)
+        {
+            return (new Bll()).UpdateStudentProfile(reference, email, address, firstName, lastName, contactNumber, userName);
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static bool CourseRegistrationByStudent(string courseName, int schoolId)
+        {
+            return (new Bll()).CourseRegistrationByStudent(courseName,schoolId);
+        }
+
+        //[WebMethod(EnableSession = true)]
+        //public void PopulateCourseDropDownListForStudent(DropDownList ItemsDropDownList)
+        //{
+        //    new Bll().PopulateCourseDropDownListForStudent(ItemsDropDownList);  
+        //}
+
+        [WebMethod(EnableSession = true)]
+        public static string DisplayCourses()
+        {
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            return js.Serialize((new Bll()).DisplayCourses()); 
         }
     }
 }
