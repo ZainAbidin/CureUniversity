@@ -84,7 +84,7 @@
         function redirect() {
             //window.location.href = "Signup_Page.aspx";
             window.location.href = "Student_Page.aspx?email=" + "zain@gmail.com";
-            //window.location.href = "Teacher_Page.aspx?email=" + "z@gmail.com";
+            //window.location.href = "Teacher_Page.aspx?email=" + "omer.saleem@lhr.edu.pk";
 
         }
 

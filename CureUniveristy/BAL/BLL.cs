@@ -57,9 +57,17 @@ namespace BLL
         //    (new Dal()).PopulateCourseDropDownListForStudent(ItemsDropDownList);
         //}
 
-        public List<Course> DisplayCourses()
+        public List<string> DisplayCourses()
         {
-            return (new Dal()).DisplayCourses();
+            List<Course> coursesList = new List<Course>();
+            List<string> compiledList = new List<string>();
+
+            coursesList = (new Dal()).DisplayCourses();
+
+            foreach (var course in coursesList)
+                compiledList.Add(string.Format("{0} - {1}", course.name, course.creditHours));
+
+            return compiledList;
         }
     }
 }

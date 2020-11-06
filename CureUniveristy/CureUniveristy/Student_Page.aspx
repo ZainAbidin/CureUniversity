@@ -16,6 +16,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
+
         function Validation() {
             var errors = "";
             errors += CheckName();
@@ -27,7 +28,6 @@
             }
             UpdateStudentProfile();
             return true;
-
         }
 
         function CheckName() {
@@ -43,6 +43,7 @@
         }
 
         function CheckUsername() {
+
             var Username = document.getElementById('userName');
             var exp = /^[a-z.]+$/
             if (exp.test(Username.value)) {
@@ -54,6 +55,7 @@
         }
 
         function CheckEmailAddress() {
+
             var emailAddress = document.getElementById('inputEmail');
             var exp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (exp.test(emailAddress.value)) {
@@ -114,7 +116,10 @@
         }
 
         $(document).ready(function () {
+
             var EMAIL = getUrlVars()["email"];
+
+
 
             $.ajax({
                 url: 'Student_Page.aspx/GetStudentByID',
@@ -139,11 +144,32 @@
                 }
 
             });
+            alert("MERA NAAM HERO");
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                success: function (data) {
+                  
+
+                    debugger;
+                    
+
+                    var good = JSON.parse(data.d);
+
+                    for (var course = 0; course < good.length; course++) {
+
+                        $('#displayCoursesId').append(new Option(good[course], course));
+
+                    }
+
+
+                }
+            });
+
         });
-
-
-
-
 
     </script>
     <title></title>
@@ -267,14 +293,13 @@
 
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <table>
-                                <tr>
-                                    <td>
 
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            </table>
+                            <select name="DisplayCourses" id="displayCoursesId"></select>
+
+
+                            <%-- <label>Select Course</label>
+                            <asp:DropDownList ID="CourseDropDownList" runat="server">
+                            </asp:DropDownList>--%>
                         </div>
 
                         <!-- Modal footer -->
