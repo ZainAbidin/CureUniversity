@@ -47,16 +47,6 @@ namespace BLL
             return (new Dal()).GetTeacherByID(email);
         }
 
-        public bool CourseRegistrationByStudent(string courseName, int schoolId)
-        {
-            return (new Dal()).CourseRegistrationByStudent(courseName, schoolId);
-        }
-
-        //public void PopulateCourseDropDownListForStudent(DropDownList ItemsDropDownList)
-        //{
-        //    (new Dal()).PopulateCourseDropDownListForStudent(ItemsDropDownList);
-        //}
-
         public List<string> DisplayCourses()
         {
             List<Course> coursesList = new List<Course>();
@@ -68,6 +58,10 @@ namespace BLL
                 compiledList.Add(string.Format("{0} - {1}", course.name, course.creditHours));
 
             return compiledList;
+        }
+        public bool StudentRegisterCourse(string email, string course)
+        {
+            return (new Dal()).StudentRegisterCourse(email, course);
         }
     }
 }

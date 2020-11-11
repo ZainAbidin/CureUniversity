@@ -79,12 +79,12 @@ CREATE TABLE COURSES (SchoolId INT, Course VARCHAR(60))
 
 
 CREATE OR ALTER PROCEDURE spCourseRegister
-@SchoolId INT,
+@Email VARCHAR (100),
 @CourseName VARCHAR(20)
 AS
 BEGIN
 
-	IF(((SELECT 1 FROM (SELECT * FROM COURSES WHERE SchoolId = @SchoolId) AS Coursess WHERE Course = @CourseName)) > 0)
+	IF(((SELECT 1 FROM (SELECT * FROM COURSES WHERE SchoolId = (SELECT School_ID FROM Users WHERE Email=@Email)) AS Coursess WHERE Course = @CourseName)) > 0)
 	BEGIN
 	PRINT'ALREADY REGISTERED IN THIS COURSE'
 	SELECT 0
@@ -92,13 +92,28 @@ BEGIN
 	ELSE
 	BEGIN
 	INSERT INTO COURSES(SchoolId, Course)
-	VALUES (@SchoolId,@CourseName)
+	VALUES ((SELECT School_ID FROM Users WHERE Email=@Email),@CourseName)
 	SELECT 1
 	PRINT'Course Registered'
 	END
 END
 -------------------------------------------------------------------------------------------------------
 EXECUTE spCourseRegister 2585,'Thermodynamics'
+-------------------------------------------------------------------------------------------------------
+---------------------------------------sp To show the number of credit hours registered----------------
+
+CREATE OR ALTER PROCEDURE spShowCredits
+AS
+BEGIN
+
+	SELECT SUM(CreditHours)
+	FROM (	SELECT CourseDetails.CreditHours 
+	FROM (SELECT SchoolId,Course FROM COURSES WHERE SchoolId = 1582) AS Tabl
+	INNER JOIN CourseDetails
+	ON CourseDetails.CourseName = Tabl.Course) AS CreditHours
+	
+END
+
 -------------------------------------------------------------------------------------------------------
 
 

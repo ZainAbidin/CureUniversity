@@ -118,9 +118,6 @@
         $(document).ready(function () {
 
             var EMAIL = getUrlVars()["email"];
-
-
-
             $.ajax({
                 url: 'Student_Page.aspx/GetStudentByID',
                 method: 'post',
@@ -144,7 +141,6 @@
                 }
 
             });
-            alert("MERA NAAM HERO");
             $.ajax({
                 url: 'Student_Page.aspx/DisplayCourses',
                 method: 'post',
@@ -152,10 +148,6 @@
                 contentType: 'application/json',
                 async: false,
                 success: function (data) {
-                  
-
-                    debugger;
-                    
 
                     var good = JSON.parse(data.d);
 
@@ -164,12 +156,87 @@
                         $('#displayCoursesId').append(new Option(good[course], course));
 
                     }
-
-
                 }
             });
 
         });
+
+
+        function readData() {
+
+            var selection = document.getElementById('displayCoursesId');
+
+            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
+
+            var credits = selectedCourse.match(/(\d+)/);
+
+            var courseName = selectedCourse.split(" ", 1).toString();
+            var x = courseName.toString();
+
+            var EMAIL = getUrlVars()["email"];
+
+            if (credits) {
+                if (document.getElementById("noOfCreditsRegistered").value != "") {
+
+                    if (parseInt(document.getElementById("noOfCreditsRegistered").value) < 6) {
+                        document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) + parseInt(credits[0]);
+
+                        $.ajax({
+                            url: 'Student_Page.aspx/StudentRegisterCourse',
+                            method: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            async: false,
+                            data: JSON.stringify({ "email": EMAIL, "course": courseName }),
+                            success: function (data) {
+                                if (data.d == false) {
+
+                                    alert("Already Registered in this Course");
+
+                                }
+                                else if (data.d == true) {
+
+                                }
+
+                            },
+                            error: function () {
+                                alert("Failure");
+                            }
+                        })
+                    }
+                    else
+                        alert("You cannot register another course")
+
+                }
+
+                else {
+                    document.getElementById("noOfCreditsRegistered").value = 0 + parseInt(credits[0]);
+                    $.ajax({
+                        url: 'Student_Page.aspx/StudentRegisterCourse',
+                        method: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        async: false,
+                        data: JSON.stringify({ "email": EMAIL, "course": courseName }),
+                        success: function (data) {
+                            if (data.d == false) {
+
+
+                                alert("Already Registered in this Course");
+
+                            }
+                            else if (data.d == true) {
+
+                            }
+
+                        },
+                        error: function () {
+                            alert("Failure");
+                        }
+                    })
+                }
+            }
+        }
 
     </script>
     <title></title>
@@ -194,10 +261,15 @@
                 </thead>
             </table>
             <br />
+
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                 Update Profile
             </button>
         </div>
+
+        <label>Number of credits registered: </label>
+        <asp:TextBox ID="noOfCreditsRegistered" runat="server"></asp:TextBox>
+
         <div class="container">
             <!-- The Modal -->
             <div class="modal" id="myModal">
@@ -304,7 +376,7 @@
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Register</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="readData()">Register</button>
                         </div>
 
                     </div>

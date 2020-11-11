@@ -26,11 +26,6 @@ namespace CureUniveristy
             return (new Bll()).UpdateStudentProfile(reference, email, address, firstName, lastName, contactNumber, userName);
         }
 
-        [WebMethod(EnableSession = true)]
-        public static bool CourseRegistrationByStudent(string courseName, int schoolId)
-        {
-            return (new Bll()).CourseRegistrationByStudent(courseName,schoolId);
-        }
 
         //[WebMethod(EnableSession = true)]
         //public void PopulateCourseDropDownListForStudent(DropDownList ItemsDropDownList)
@@ -43,6 +38,12 @@ namespace CureUniveristy
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
             return js.Serialize((new Bll()).DisplayCourses()); 
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static bool StudentRegisterCourse(string email, string course)
+        {
+            return (new Bll()).StudentRegisterCourse(email, course);
         }
     }
 }

@@ -226,50 +226,7 @@ namespace DAL
             }
         }
 
-        public bool CourseRegistrationByStudent(string courseName, int schoolId)
-        {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                SqlCommand cmnd = new SqlCommand("spCourseRegister", connection);
 
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@SchoolId", schoolId);
-                cmnd.Parameters.AddWithValue("@CourseName", courseName);
-
-                connection.Open();
-
-                string registrationCheck = Convert.ToString(cmnd.ExecuteScalar());
-
-                if (!string.IsNullOrEmpty(registrationCheck))
-                {
-                    if (registrationCheck.Equals("0"))
-                    {
-                        return false; /////////course already traken up
-                    }
-                    else
-                    {
-                        return true; /////// course registrered
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        //public void PopulateCourseDropDownListForStudent(DropDownList ItemsDropDownList)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(ConnectionString))
-        //    {
-        //        SqlCommand cmnd = new SqlCommand("spShowCourses", connection);
-        //        cmnd.CommandType = CommandType.StoredProcedure;
-        //        connection.Open();
-        //        ItemsDropDownList.DataSource = cmnd.ExecuteReader();
-        //        ItemsDropDownList.DataTextField = "ItemName";
-        //        ItemsDropDownList.DataValueField = "ItemID";
-        //        ItemsDropDownList.DataBind();
-        //    }
-
-        //}
 
         public List<Course> DisplayCourses()
         {
@@ -289,6 +246,33 @@ namespace DAL
                 }
                 return courses;
             }
+        }
+
+        public bool StudentRegisterCourse(string email, string course)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spCourseRegister", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@Email", email);
+                cmnd.Parameters.AddWithValue("@CourseName", course);
+                connection.Open();
+                string checkRegistration = Convert.ToString(cmnd.ExecuteScalar());
+                if (!string.IsNullOrEmpty(checkRegistration))
+                {
+                    if (checkRegistration.Equals("0"))
+                    {
+                        return false; ///////// already registered
+                    }
+                    else
+                    {
+                        return true; /////// registered
+                    }
+                }
+
+                return true;
+            }
+
         }
     }
 }
