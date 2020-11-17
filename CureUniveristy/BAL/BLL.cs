@@ -59,9 +59,40 @@ namespace BLL
 
             return compiledList;
         }
+
         public bool StudentRegisterCourse(string email, string course)
         {
             return (new Dal()).StudentRegisterCourse(email, course);
+        }
+
+        public int GetStudnetCreditHours(string email)
+        {
+            return (new Dal().GetStudnetCreditHours(email));
+        }
+
+        public List<string> DisplayTeacherToStudent(string courseName)
+        {
+            List<Teacher> teacherlist = new List<Teacher>();
+            List<string> compiledList = new List<string>();
+            teacherlist = (new Dal().DisplayTeachersToStudent(courseName));
+            foreach (var teacher in teacherlist)
+            {
+                compiledList.Add(teacher.firstName);
+            }
+            return compiledList;
+        }
+
+        public List<string> DisplayRegisteredCourses(string email)
+        {
+            List<Course> coursesList = new List<Course>();
+            List<string> compiledList = new List<string>();
+
+            coursesList = (new Dal()).DisplayRegisteredCourses(email);
+
+            foreach (var course in coursesList)
+                compiledList.Add(course.name);
+
+            return compiledList;
         }
     }
 }

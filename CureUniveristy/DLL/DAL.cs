@@ -226,8 +226,6 @@ namespace DAL
             }
         }
 
-
-
         public List<Course> DisplayCourses()
         {
             List<Course> courses = new List<Course>();
@@ -273,6 +271,61 @@ namespace DAL
                 return true;
             }
 
+        }
+
+        public int GetStudnetCreditHours(string email)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spShowCredits", connection);
+
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@Email", email);
+
+                connection.Open();
+
+                return Convert.ToInt32((cmnd.ExecuteScalar()));
+            }
+        }
+
+        public List<Teacher> DisplayTeachersToStudent(string courseName)
+        {
+            List<Teacher> teachers = new List<Teacher>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spShowTeacher", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@CourseName", courseName);
+                connection.Open();
+                SqlDataReader rdr = cmnd.ExecuteReader();
+                while(rdr.Read())
+                {
+                    Teacher teacher = new Teacher();
+                    teacher.firstName = rdr["First_Name"].ToString();
+                    teachers.Add(teacher);
+                }
+                return teachers;
+            }
+        }
+
+        public List<Course> DisplayRegisteredCourses(string email)
+        {
+            List<Course> courses = new List<Course>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spShowRegisteredCourse", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@Email", email);
+                connection.Open();
+                SqlDataReader rdr = cmnd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Course course = new Course();
+                    course.name = rdr["Course"].ToString();
+                    courses.Add(course);
+                }
+                return courses;
+            }
         }
     }
 }

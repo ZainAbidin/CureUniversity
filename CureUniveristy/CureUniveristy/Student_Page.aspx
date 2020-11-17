@@ -117,6 +117,9 @@
 
         $(document).ready(function () {
 
+            $("#displayTeachers").hide();
+            $("#uploadAssignment").hide();
+
             var EMAIL = getUrlVars()["email"];
             $.ajax({
                 url: 'Student_Page.aspx/GetStudentByID',
@@ -159,7 +162,23 @@
                 }
             });
 
+
+            $.ajax({
+                url: 'Student_Page.aspx/GetStudnetCreditHours',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+                    document.getElementById("noOfCreditsRegistered").value = data.d;
+                }
+            });
+
         });
+        function displaysuccess() {
+            alert("You have been Registered successfully");
+        }
 
 
         function readData() {
@@ -171,15 +190,14 @@
             var credits = selectedCourse.match(/(\d+)/);
 
             var courseName = selectedCourse.split(" ", 1).toString();
-            var x = courseName.toString();
 
             var EMAIL = getUrlVars()["email"];
 
             if (credits) {
                 if (document.getElementById("noOfCreditsRegistered").value != "") {
 
+                    document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) + parseInt(credits[0]);
                     if (parseInt(document.getElementById("noOfCreditsRegistered").value) < 6) {
-                        document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) + parseInt(credits[0]);
 
                         $.ajax({
                             url: 'Student_Page.aspx/StudentRegisterCourse',
@@ -196,6 +214,8 @@
                                 }
                                 else if (data.d == true) {
 
+                                    $("#displayTeachers").show();
+
                                 }
 
                             },
@@ -203,10 +223,11 @@
                                 alert("Failure");
                             }
                         })
+
                     }
                     else
                         alert("You cannot register another course")
-
+                    document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) - parseInt(credits[0]);
                 }
 
                 else {
@@ -227,6 +248,8 @@
                             }
                             else if (data.d == true) {
 
+                                $("#displayTeachers").show();
+
                             }
 
                         },
@@ -234,8 +257,56 @@
                             alert("Failure");
                         }
                     })
+
                 }
             }
+
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayTeacherToStudent',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "courseName": courseName }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var teacher = 0; teacher < good.length; teacher++) {
+
+                        $('#displayTeachers').append(new Option(good[teacher], teacher));
+
+                    }
+                }
+            });
+        }
+        function displayquiz() {
+            alert("Hurray! No quiz uploaded yet");
+        }
+
+        function displayUploadAssignment() {
+            $("#uploadAssignment").show();
+            var EMAIL = getUrlVars()["email"];
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayRegisteredCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL}),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++) {
+
+                        $('#displayRegisteredCoursesId').append(new Option(good[registeredCourse], registeredCourse));
+
+                    }
+                }
+            });
+
+
         }
 
     </script>
@@ -351,6 +422,25 @@
                 Register Course
             </button>
         </div>
+        <div id="displayTeachers">
+            <div>
+                <br />
+                <select name="displayTeachers"></select>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" id="chooseTeacher" onclick="displaysuccess()">Choose Teacher</button>
+            </div>
+        </div>
+        <div>
+            <br />
+            <button type="button" class="btn btn-primary" id="takeQuiz" onclick="displayquiz()">Take Quiz</button>
+            <br />
+            <br />
+            <br />
+        </div>
+
+
+
         <div class="container">
             <!-- The Modal -->
             <div class="modal" id="courseModal">
@@ -368,10 +458,6 @@
 
                             <select name="DisplayCourses" id="displayCoursesId"></select>
 
-
-                            <%-- <label>Select Course</label>
-                            <asp:DropDownList ID="CourseDropDownList" runat="server">
-                            </asp:DropDownList>--%>
                         </div>
 
                         <!-- Modal footer -->
@@ -385,8 +471,23 @@
 
         </div>
 
+        <div>
+            <button type="button" class="btn btn-primary" onclick="displayUploadAssignment()">
+                Upload Assignment
+            </button>
+        </div>
 
+        <div id="uploadAssignment">
+
+            <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
+            <br />
+            <asp:FileUpload ID="FileUpload1" runat="server" />
+            <asp:Button runat="server" id="UploadButton" text="Upload" onclick="UploadButton_Click" />
+             <br /><br />
+            <asp:Label runat="server" ID="Label1" Text="Upload status: " />
+        </div>
 
     </form>
+
 </body>
 </html>
