@@ -94,5 +94,10 @@ namespace BLL
 
             return compiledList;
         }
+
+        public void AddAssignmnetToDatabase(string email, string course, string name, string type, byte[] data)
+        {
+            new Dal().AddAssignmnetToDatabase(email, course, name, type, data);
+        }
     }
 }

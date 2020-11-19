@@ -1,9 +1,9 @@
 ﻿using BLL;
 using System;
+using System.IO;
 using System.Web.Script.Serialization;
 using System.Web.Services;
 using System.Web.UI.WebControls;
-using System.IO;
 
 
 namespace CureUniveristy
@@ -14,6 +14,23 @@ namespace CureUniveristy
         {
 
         }
+
+        protected void UploadButton_Click(object sender, EventArgs e)
+        {
+            string FN = "";
+            FN = Path.GetFileName(FileUpload1.PostedFile.FileName);
+            string contentType = FileUpload1.PostedFile.ContentType;
+            Stream fs = FileUpload1.PostedFile.InputStream;
+            BinaryReader br = new BinaryReader(fs);
+            byte[] bytes = br.ReadBytes((Int32)fs.Length);
+            string email = this.Request.Form.Get("test2");
+            string course = this.Request.Form.Get("test");
+            new Bll().AddAssignmnetToDatabase(email, course, FN, contentType, bytes);
+         
+            
+
+        }
+    
 
         [WebMethod(EnableSession = true)]
         public static string GetStudentByID(string email)
@@ -61,31 +78,6 @@ namespace CureUniveristy
             return js.Serialize((new Bll()).DisplayRegisteredCourses(email));
         }
 
-        protected void UploadButton_Click(object sender, EventArgs e)
-        {
-            if (FileUploadControl.HasFile)
-            {
-                try
-                {
-                    if (FileUploadControl.PostedFile.ContentType == "image/jpeg")
-                    {
-                        if (FileUploadControl.PostedFile.ContentLength < 102400)
-                        {
-                            string filename = Path.GetFileName(FileUploadControl.FileName);
-                            FileUploadControl.SaveAs(Server.MapPath("~/") + filename);
-                            StatusLabel.Text = "Upload status: File uploaded!";
-                        }
-                        else
-                            StatusLabel.Text = "Upload status: The file has to be less than 100 kb!";
-                    }
-                    else
-                        StatusLabel.Text = "Upload status: Only JPEG files are accepted!";
-                }
-                catch (Exception ex)
-                {
-                    StatusLabel.Text = "Upload status: The file could not be uploaded. The following error occured: " + ex.Message;
-                }
-            }
-        }
+
     }
 }

@@ -25,5 +25,11 @@ namespace CureUniveristy
         {
             return (new Bll()).UpdateStudentProfile(reference, email, address, firstName, lastName, contactNumber, userName);
         }
+
+        [WebMethod(EnableSession = true)]
+        public void EditCourse()
+        {
+
+        }
     }
 }

@@ -280,7 +280,7 @@ namespace DAL
                 SqlCommand cmnd = new SqlCommand("spShowCredits", connection);
 
                 cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
+                cmnd.Parameters.AddWithValue("@Email",  email);
 
                 connection.Open();
 
@@ -327,6 +327,24 @@ namespace DAL
                 return courses;
             }
         }
+
+        public void AddAssignmnetToDatabase(string email, string course, string name, string type, byte[] data)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spUploadAssignment", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@Email", email);
+                cmnd.Parameters.AddWithValue("@Course", course);
+                cmnd.Parameters.AddWithValue("@Assignment_Name", name);
+                cmnd.Parameters.AddWithValue("@Assignment_Type", type);
+                cmnd.Parameters.AddWithValue("@Assignment_Data", data);
+                connection.Open();
+                cmnd.ExecuteNonQuery();
+            }
+        }
+
+
     }
 }
 

@@ -115,11 +115,15 @@
             return vars;
         }
 
-        $(document).ready(function () {
 
+        $(document).ready(function () {
+            PageReady(); 
+        });
+
+        function PageReady() {
             $("#displayTeachers").hide();
             $("#uploadAssignment").hide();
-
+            
             var EMAIL = getUrlVars()["email"];
             $.ajax({
                 url: 'Student_Page.aspx/GetStudentByID',
@@ -174,12 +178,12 @@
                     document.getElementById("noOfCreditsRegistered").value = data.d;
                 }
             });
+            
+        }
 
-        });
         function displaysuccess() {
             alert("You have been Registered successfully");
         }
-
 
         function readData() {
 
@@ -280,6 +284,7 @@
                 }
             });
         }
+
         function displayquiz() {
             alert("Hurray! No quiz uploaded yet");
         }
@@ -293,7 +298,7 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 async: false,
-                data: JSON.stringify({ "email": EMAIL}),
+                data: JSON.stringify({ "email": EMAIL }),
                 success: function (data) {
 
                     var good = JSON.parse(data.d);
@@ -303,17 +308,24 @@
                         $('#displayRegisteredCoursesId').append(new Option(good[registeredCourse], registeredCourse));
 
                     }
+
                 }
             });
-
-
+            document.getElementById("test2").value = EMAIL;
+            var e = document.getElementById('displayRegisteredCoursesId');
+            document.getElementById("test").value = e.options[e.selectedIndex].innerHTML;
+            //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").options.selectedItem.text;
+            //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").selectedIndex[0].value;
+            
         }
+
 
     </script>
     <title></title>
 </head>
 <body>
     <form id="form1" runat="server">
+
         <div>
             <h1>Welcome Student!</h1>
         </div>
@@ -339,7 +351,7 @@
         </div>
 
         <label>Number of credits registered: </label>
-        <asp:TextBox ID="noOfCreditsRegistered" runat="server"></asp:TextBox>
+        <asp:TextBox ID="noOfCreditsRegistered" runat="server">No Of credits registered</asp:TextBox>
 
         <div class="container">
             <!-- The Modal -->
@@ -361,7 +373,7 @@
                                     <td>
                                         <label>Email address</label></td>
                                     <td>
-                                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus /></td>
+                                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" /></td>
                                 </tr>
 
                                 <tr>
@@ -369,34 +381,34 @@
                                     <td>
                                         <label>First Name</label></td>
                                     <td>
-                                        <input type="text" id="firstName" class="form-control" placeholder="First Name" required /></td>
+                                        <input type="text" id="firstName" class="form-control" placeholder="First Name" /></td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label>Last Name</label>
                                     </td>
                                     <td>
-                                        <input type="text" id="lastName" class="form-control" placeholder="Last Name" required /></td>
+                                        <input type="text" id="lastName" class="form-control" placeholder="Last Name" /></td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label>Phone Number</label></td>
                                     <td>
-                                        <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" pattern="[0-9]{3}-[0-9]{7}" required />
+                                        <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" pattern="[0-9]{3}-[0-9]{7}" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label>Address</label></td>
                                     <td>
-                                        <input type="text" id="address" class="form-control" placeholder="Address" required />
+                                        <input type="text" id="address" class="form-control" placeholder="Address" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label>Username</label></td>
                                     <td>
-                                        <input type="text" id="userName" class="form-control" placeholder="UserName" required />
+                                        <input type="text" id="userName" class="form-control" placeholder="UserName" />
                                     </td>
                                 </tr>
                             </table>
@@ -414,8 +426,6 @@
         </div>
 
 
-        <div>
-        </div>
 
         <div>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#courseModal">
@@ -438,8 +448,6 @@
             <br />
             <br />
         </div>
-
-
 
         <div class="container">
             <!-- The Modal -->
@@ -470,7 +478,6 @@
             </div>
 
         </div>
-
         <div>
             <button type="button" class="btn btn-primary" onclick="displayUploadAssignment()">
                 Upload Assignment
@@ -480,11 +487,14 @@
         <div id="uploadAssignment">
 
             <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
+            <input type="hidden" id="test" name="Test"/>
+            <input type="hidden" id="test2" name="Test2"/>
             <br />
             <asp:FileUpload ID="FileUpload1" runat="server" />
-            <asp:Button runat="server" id="UploadButton" text="Upload" onclick="UploadButton_Click" />
-             <br /><br />
-            <asp:Label runat="server" ID="Label1" Text="Upload status: " />
+            <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click"/>
+            <br />
+            <br />
+            <asp:Label runat="server" ID="StatusLabel" Text="Upload status: " />
         </div>
 
     </form>
