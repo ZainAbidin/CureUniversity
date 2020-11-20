@@ -344,7 +344,19 @@ namespace DAL
             }
         }
 
-
+        public void EditCourse(string course, string courseName, int creditHours)
+        {
+            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmnd = new SqlCommand("spEditCourse", connection);
+                cmnd.CommandType = CommandType.StoredProcedure;
+                cmnd.Parameters.AddWithValue("@CourseRefrence", course);
+                cmnd.Parameters.AddWithValue("@CourseName", courseName);
+                cmnd.Parameters.AddWithValue("@CourseCredits", creditHours);
+                connection.Open();
+                cmnd.ExecuteNonQuery();
+            }
+        }
     }
 }
 

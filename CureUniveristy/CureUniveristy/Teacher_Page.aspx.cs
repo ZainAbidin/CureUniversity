@@ -27,9 +27,9 @@ namespace CureUniveristy
         }
 
         [WebMethod(EnableSession = true)]
-        public void EditCourse()
+        public static void EditCourse(string course, string courseName, string creditHours)
         {
-
+            new Bll().EditCourse(course, courseName, Int32.Parse(creditHours));
         }
     }
 }

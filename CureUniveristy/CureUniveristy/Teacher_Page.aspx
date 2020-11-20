@@ -9,9 +9,7 @@
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -113,6 +111,29 @@
             return vars;
         }
 
+        function EditCourse() {
+            var selection = document.getElementById('displayCoursesId');
+            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
+
+            var courseName = $('#courseName').val();
+            var creditHours = $('#creditHours').val();
+            
+            $.ajax({
+                url: 'Teacher_Page.aspx/EditCourse',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "course": selectedCourse, "courseName": courseName, "creditHours": creditHours }),
+                success: function (data) {
+
+                },
+                error: function () {
+                    alert("failure");
+                }
+            })
+        }
+
         $(document).ready(function () {
             var EMAIL = getUrlVars()["email"];
 
@@ -139,6 +160,25 @@
                 }
 
             });
+
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayRegisteredCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var course = 0; course < good.length; course++) {
+
+                        $('#displayCoursesId').append(new Option(good[course], course));
+
+                    }
+                }
+            });
         });
 
 
@@ -149,7 +189,7 @@
     <title></title>
 </head>
 <body>
-  <form id="form1" runat="server">
+    <form id="form1" runat="server">
         <div>
             <h1>Welcome Teacher!</h1>
         </div>
@@ -240,6 +280,67 @@
             </div>
 
         </div>
+
+        <!-- -------------------------------MODAL FOR EDIT COURSE------------------------------------------------->
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editCourseModal">
+                Edit Course
+            </button>
+        </div>
+        <div class="container">
+            <!-- The Modal -->
+            <div class="modal" id="editCourseModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Courses</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <select name="DisplayCourses" id="displayCoursesId"></select>
+
+                        </div>
+
+                        <div>
+                            <table>
+                                <tr>
+
+                                    <td>
+                                        <label>Course Name</label>
+
+                                    </td>
+                                    <td>
+                                        <input type="text" id="courseName" class="form-control" placeholder="Course Name" required />
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Credit Hours</label>
+                                    </td>
+                                    <td>
+                                        <input type="number" id="creditHours" class="form-control" placeholder="Credit Hours" required />
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="EditCourse()">Update</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--------------------------------------------------------------------------------------------------->
 
 
     </form>

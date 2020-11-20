@@ -99,5 +99,10 @@ namespace BLL
         {
             new Dal().AddAssignmnetToDatabase(email, course, name, type, data);
         }
+
+        public void EditCourse(string course, string courseName, int creditHours)
+        {
+            new Dal().EditCourse(course, courseName, creditHours);
+        }
     }
 }
