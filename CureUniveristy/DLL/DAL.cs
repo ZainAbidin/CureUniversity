@@ -13,74 +13,88 @@ namespace DAL
 
         public int LogIn(string email, string password)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spCheckCredentials", connection);
-
-                cmnd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.Parameters.AddWithValue("@Password", password);
-
-                connection.Open();
-
-                string role = Convert.ToString(cmnd.ExecuteScalar());
-                int returnvar = 0;
-
-                if (!string.IsNullOrEmpty(role))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    if (role.Equals("Student"))
-                    {
-                        returnvar = 0;
-                    }
-                    else if (role.Equals("Teacher"))
-                    {
-                        returnvar = 1;
-                    }
-                    else if (role.Equals("Admin"))
-                    {
-                        return 2;
-                    }
-                    return returnvar;
+                    SqlCommand cmnd = new SqlCommand("spCheckCredentials", connection);
 
+                    cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Password", password);
+
+                    connection.Open();
+
+                    string role = Convert.ToString(cmnd.ExecuteScalar());
+                    int returnvar = 0;
+
+                    if (!string.IsNullOrEmpty(role))
+                    {
+                        if (role.Equals("Student"))
+                        {
+                            returnvar = 0;
+                        }
+                        else if (role.Equals("Teacher"))
+                        {
+                            returnvar = 1;
+                        }
+                        else if (role.Equals("Admin"))
+                        {
+                            return 2;
+                        }
+                        return returnvar;
+
+                    }
+                    else
+                    {
+                        return 3;
+                    }
                 }
-                else
-                {
-                    return 3;
-                }
+            }
+            catch (Exception e)
+            {
+                return 3;
             }
         }
 
         public bool SignUp(string email, string address, string firstName, string lastName, string password, int schoolId, string contactNumber, string userName)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spstudentSignup", connection);
-
-                cmnd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.Parameters.AddWithValue("@Address", address);
-                cmnd.Parameters.AddWithValue("@FirstName", firstName);
-                cmnd.Parameters.AddWithValue("@LastName", lastName);
-                cmnd.Parameters.AddWithValue("@SchoolId", schoolId);
-                cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
-                cmnd.Parameters.AddWithValue("@Password", password);
-                cmnd.Parameters.AddWithValue("@Username", userName);
-                connection.Open();
-
-                string userExistenceCheck = Convert.ToString(cmnd.ExecuteScalar());
-
-                if (!string.IsNullOrEmpty(userExistenceCheck))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    if (userExistenceCheck.Equals("0"))
-                    {
-                        return false; /////////user already exists
-                    }
-                    else
-                    {
-                        return true; /////// NEW USER IS TO BE REGISTERED
-                    }
-                }
+                    SqlCommand cmnd = new SqlCommand("spstudentSignup", connection);
 
+                    cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Address", address);
+                    cmnd.Parameters.AddWithValue("@FirstName", firstName);
+                    cmnd.Parameters.AddWithValue("@LastName", lastName);
+                    cmnd.Parameters.AddWithValue("@SchoolId", schoolId);
+                    cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
+                    cmnd.Parameters.AddWithValue("@Password", password);
+                    cmnd.Parameters.AddWithValue("@Username", userName);
+                    connection.Open();
+
+                    string userExistenceCheck = Convert.ToString(cmnd.ExecuteScalar());
+
+                    if (!string.IsNullOrEmpty(userExistenceCheck))
+                    {
+                        if (userExistenceCheck.Equals("0"))
+                        {
+                            return false; /////////user already exists
+                        }
+                        else
+                        {
+                            return true; /////// NEW USER IS TO BE REGISTERED
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
                 return false;
             }
         }
@@ -88,140 +102,183 @@ namespace DAL
         public List<Students> GetStudentByID(string email)
         {
             List<Students> students = new List<Students>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spuserIdentify", connection);
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.CommandType = System.Data.CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader rdr = cmnd.ExecuteReader();
-                while (rdr.Read())
+
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    Students student = new Students();
-                    student.ID = Convert.ToInt32(rdr["School_ID"]);
-                    student.firstName = rdr["First_Name"].ToString();
-                    student.lastName = rdr["Last_Name"].ToString();
-                    student.email = rdr["Email"].ToString();
-                    student.contactNumber = rdr["Contact_Number"].ToString();
-                    student.address = rdr["Adress"].ToString();
-                    students.Add(student);
+                    SqlCommand cmnd = new SqlCommand("spuserIdentify", connection);
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Students student = new Students();
+                        student.ID = Convert.ToInt32(rdr["School_ID"]);
+                        student.firstName = rdr["First_Name"].ToString();
+                        student.lastName = rdr["Last_Name"].ToString();
+                        student.email = rdr["Email"].ToString();
+                        student.contactNumber = rdr["Contact_Number"].ToString();
+                        student.address = rdr["Adress"].ToString();
+                        students.Add(student);
+                    }
+                    return students;
                 }
+            }
+            catch (Exception e)
+            {
                 return students;
             }
         }
 
         public bool UpdateStudentProfile(string reference, string email, string address, string firstName, string lastName, string contactNumber, string userName)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spUpdateStudent", connection);
-
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.Parameters.AddWithValue("@Address", address);
-                cmnd.Parameters.AddWithValue("@FirstName", firstName);
-                cmnd.Parameters.AddWithValue("@LastName", lastName);
-                cmnd.Parameters.AddWithValue("@reference", reference);
-                cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
-                cmnd.Parameters.AddWithValue("@Username", userName);
-                connection.Open();
-
-                string checkUpdate = Convert.ToString(cmnd.ExecuteScalar());
-
-                if (!string.IsNullOrEmpty(checkUpdate))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    if (checkUpdate.Equals("0"))
-                    {
-                        return false; ///////// didnt update
-                    }
-                    else
-                    {
-                        return true; /////// updated
-                    }
-                }
+                    SqlCommand cmnd = new SqlCommand("spUpdateStudent", connection);
 
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Address", address);
+                    cmnd.Parameters.AddWithValue("@FirstName", firstName);
+                    cmnd.Parameters.AddWithValue("@LastName", lastName);
+                    cmnd.Parameters.AddWithValue("@reference", reference);
+                    cmnd.Parameters.AddWithValue("@Contact_Number", contactNumber);
+                    cmnd.Parameters.AddWithValue("@Username", userName);
+                    connection.Open();
+
+                    string checkUpdate = Convert.ToString(cmnd.ExecuteScalar());
+
+                    if (!string.IsNullOrEmpty(checkUpdate))
+                    {
+                        if (checkUpdate.Equals("0"))
+                        {
+                            return false; ///////// didnt update
+                        }
+                        else
+                        {
+                            return true; /////// updated
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
                 return false;
             }
         }
 
         public DataTable ViewAllStudentstoAdmin()
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            DataTable dt = new DataTable();
+            try
             {
+                using (SqlConnection con = new SqlConnection(ConnectionString))
+                {
 
-                SqlCommand cmnd = new SqlCommand("spViewAllStudents", con);
-                cmnd.CommandType = System.Data.CommandType.StoredProcedure;
-                con.Open();
-                SqlDataAdapter da = new SqlDataAdapter(cmnd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                    SqlCommand cmnd = new SqlCommand("spViewAllStudents", con);
+                    cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmnd);
+
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
                 return dt;
             }
         }
 
         public DataTable ViewAllTeacherstoAdmin()
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            DataTable dt = new DataTable();
+            try
             {
 
-                SqlCommand cmnd = new SqlCommand("spViewAllTeachers", con);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                SqlDataAdapter da = new SqlDataAdapter(cmnd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                using (SqlConnection con = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spViewAllTeachers", con);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(cmnd);
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
                 return dt;
             }
         }
 
         public bool BlockOrSuspendEntity(int choice, int schoolId)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spSuspend", con);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                con.Open();
-                cmnd.Parameters.AddWithValue("@Choice", choice);
-                cmnd.Parameters.AddWithValue("@SchoolID", schoolId);
-                string checkUpdate = Convert.ToString(cmnd.ExecuteScalar());
-                if (!string.IsNullOrEmpty(checkUpdate))
+                using (SqlConnection con = new SqlConnection(ConnectionString))
                 {
-                    if (checkUpdate.Equals("0"))
+                    SqlCommand cmnd = new SqlCommand("spSuspend", con);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    con.Open();
+                    cmnd.Parameters.AddWithValue("@Choice", choice);
+                    cmnd.Parameters.AddWithValue("@SchoolID", schoolId);
+                    string checkUpdate = Convert.ToString(cmnd.ExecuteScalar());
+                    if (!string.IsNullOrEmpty(checkUpdate))
                     {
-                        return false; ///////// updated
+                        if (checkUpdate.Equals("0"))
+                        {
+                            return false; ///////// updated
+                        }
+                        else
+                        {
+                            return true; /////// not updated
+                        }
                     }
-                    else
-                    {
-                        return true; /////// not updated
-                    }
-                }
 
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
                 return true;
             }
-
         }
 
         public List<Teacher> GetTeacherByID(string email)
         {
             List<Teacher> teachers = new List<Teacher>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spuserIdentify", connection);
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader rdr = cmnd.ExecuteReader();
-                while (rdr.Read())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    Teacher teacher = new Teacher();
-                    teacher.ID = Convert.ToInt32(rdr["School_ID"]);
-                    teacher.firstName = rdr["First_Name"].ToString();
-                    teacher.lastName = rdr["Last_Name"].ToString();
-                    teacher.email = rdr["Email"].ToString();
-                    teacher.contactNumber = rdr["Contact_Number"].ToString();
-                    teacher.address = rdr["Adress"].ToString();
-                    teachers.Add(teacher);
+                    SqlCommand cmnd = new SqlCommand("spuserIdentify", connection);
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Teacher teacher = new Teacher();
+                        teacher.ID = Convert.ToInt32(rdr["School_ID"]);
+                        teacher.firstName = rdr["First_Name"].ToString();
+                        teacher.lastName = rdr["Last_Name"].ToString();
+                        teacher.email = rdr["Email"].ToString();
+                        teacher.contactNumber = rdr["Contact_Number"].ToString();
+                        teacher.address = rdr["Adress"].ToString();
+                        teachers.Add(teacher);
+                    }
+                    return teachers;
                 }
+            }
+            catch (Exception e)
+            {
                 return teachers;
             }
         }
@@ -229,45 +286,59 @@ namespace DAL
         public List<Course> DisplayCourses()
         {
             List<Course> courses = new List<Course>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spShowCourses", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                SqlDataReader rdr = cmnd.ExecuteReader();
-                while (rdr.Read())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    Course course = new Course();
-                    course.creditHours = Convert.ToInt32(rdr["CreditHours"]);
-                    course.name = rdr["CourseName"].ToString();
-                    courses.Add(course);
+                    SqlCommand cmnd = new SqlCommand("spShowCourses", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Course course = new Course();
+                        course.creditHours = Convert.ToInt32(rdr["CreditHours"]);
+                        course.name = rdr["CourseName"].ToString();
+                        courses.Add(course);
+                    }
+                    return courses;
                 }
+            }
+            catch (Exception e)
+            {
                 return courses;
             }
         }
 
         public bool StudentRegisterCourse(string email, string course)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spCourseRegister", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.Parameters.AddWithValue("@CourseName", course);
-                connection.Open();
-                string checkRegistration = Convert.ToString(cmnd.ExecuteScalar());
-                if (!string.IsNullOrEmpty(checkRegistration))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    if (checkRegistration.Equals("0"))
+                    SqlCommand cmnd = new SqlCommand("spCourseRegister", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@CourseName", course);
+                    connection.Open();
+                    string checkRegistration = Convert.ToString(cmnd.ExecuteScalar());
+                    if (!string.IsNullOrEmpty(checkRegistration))
                     {
-                        return false; ///////// already registered
+                        if (checkRegistration.Equals("0"))
+                        {
+                            return false; ///////// already registered
+                        }
+                        else
+                        {
+                            return true; /////// registered
+                        }
                     }
-                    else
-                    {
-                        return true; /////// registered
-                    }
-                }
 
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
                 return true;
             }
 
@@ -275,35 +346,49 @@ namespace DAL
 
         public int GetStudnetCreditHours(string email)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spShowCredits", connection);
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spShowCredits", connection);
 
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email",  email);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
 
-                connection.Open();
+                    connection.Open();
 
-                return Convert.ToInt32((cmnd.ExecuteScalar()));
+                    return Convert.ToInt32((cmnd.ExecuteScalar()));
+                }
+            }
+            catch (Exception e)
+            {
+                return 0;
             }
         }
 
         public List<Teacher> DisplayTeachersToStudent(string courseName)
         {
             List<Teacher> teachers = new List<Teacher>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spShowTeacher", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@CourseName", courseName);
-                connection.Open();
-                SqlDataReader rdr = cmnd.ExecuteReader();
-                while(rdr.Read())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    Teacher teacher = new Teacher();
-                    teacher.firstName = rdr["First_Name"].ToString();
-                    teachers.Add(teacher);
+                    SqlCommand cmnd = new SqlCommand("spShowTeacher", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@CourseName", courseName);
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Teacher teacher = new Teacher();
+                        teacher.firstName = rdr["First_Name"].ToString();
+                        teachers.Add(teacher);
+                    }
+                    return teachers;
                 }
+            }
+            catch (Exception e)
+            {
                 return teachers;
             }
         }
@@ -311,50 +396,92 @@ namespace DAL
         public List<Course> DisplayRegisteredCourses(string email)
         {
             List<Course> courses = new List<Course>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spShowRegisteredCourse", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                connection.Open();
-                SqlDataReader rdr = cmnd.ExecuteReader();
-                while (rdr.Read())
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    Course course = new Course();
-                    course.name = rdr["Course"].ToString();
-                    courses.Add(course);
+                    SqlCommand cmnd = new SqlCommand("spShowRegisteredCourse", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Course course = new Course();
+                        course.name = rdr["Course"].ToString();
+                        courses.Add(course);
+                    }
+                    return courses;
                 }
+            }
+            catch (Exception e)
+            {
                 return courses;
             }
         }
 
         public void AddAssignmnetToDatabase(string email, string course, string name, string type, byte[] data)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spUploadAssignment", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@Email", email);
-                cmnd.Parameters.AddWithValue("@Course", course);
-                cmnd.Parameters.AddWithValue("@Assignment_Name", name);
-                cmnd.Parameters.AddWithValue("@Assignment_Type", type);
-                cmnd.Parameters.AddWithValue("@Assignment_Data", data);
-                connection.Open();
-                cmnd.ExecuteNonQuery();
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spUploadAssignment", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+                    cmnd.Parameters.AddWithValue("@Assignment_Name", name);
+                    cmnd.Parameters.AddWithValue("@Assignment_Type", type);
+                    cmnd.Parameters.AddWithValue("@Assignment_Data", data);
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
             }
         }
 
         public void EditCourse(string course, string courseName, int creditHours)
         {
-            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            try
             {
-                SqlCommand cmnd = new SqlCommand("spEditCourse", connection);
-                cmnd.CommandType = CommandType.StoredProcedure;
-                cmnd.Parameters.AddWithValue("@CourseRefrence", course);
-                cmnd.Parameters.AddWithValue("@CourseName", courseName);
-                cmnd.Parameters.AddWithValue("@CourseCredits", creditHours);
-                connection.Open();
-                cmnd.ExecuteNonQuery();
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spEditCourse", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@CourseRefrence", course);
+                    cmnd.Parameters.AddWithValue("@CourseName", courseName);
+                    cmnd.Parameters.AddWithValue("@CourseCredits", creditHours);
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public void ModeOfStudy(string email, string course, string mode)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spModeOfStudy", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Course", course);
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Mode", mode);
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
             }
         }
     }

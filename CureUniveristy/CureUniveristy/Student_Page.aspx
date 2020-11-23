@@ -4,12 +4,40 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/" />
+
+    <!-- Bootstrap core CSS -->
+    <link href="dashboard.css" rel="stylesheet" />
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="Scripts/jquery-3.3.1.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -115,13 +143,13 @@
 
 
         $(document).ready(function () {
-            PageReady(); 
+            PageReady();
         });
 
         function PageReady() {
-            $("#displayTeachers").hide();
+            $("#displayTeacher").hide();
             $("#uploadAssignment").hide();
-            
+
             var EMAIL = getUrlVars()["email"];
             $.ajax({
                 url: 'Student_Page.aspx/GetStudentByID',
@@ -141,7 +169,10 @@
                             { 'data': 'address' },
                             { 'data': 'email' },
                             { 'data': 'contactNumber' }
-                        ]
+                        ],
+                        searching: false,
+                        bPaginate: false,
+                        bInfo: false
                     });
                 }
 
@@ -176,11 +207,38 @@
                     document.getElementById("noOfCreditsRegistered").value = data.d;
                 }
             });
-            
+
         }
 
         function displaysuccess() {
             alert("You have been Registered successfully");
+
+            var selection = document.getElementById('displayCoursesId');
+
+            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
+
+            var courseName = selectedCourse.split(" ", 1).toString();
+
+            var EMAIL = getUrlVars()["email"];
+
+            var modeSelection = document.getElementById('displayModeOfStudy');
+
+            var mode = modeSelection.options[modeSelection.selectedIndex].innerHTML;
+
+            $.ajax({
+                url: 'Student_Page.aspx/ModeOfStudy',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL, "course": courseName, "mode": mode}),
+                success: function (data) {
+
+                }
+
+            });
+
+            $("#displayTeacher").hide();
         }
 
         function readData() {
@@ -198,8 +256,8 @@
             if (credits) {
                 if (document.getElementById("noOfCreditsRegistered").value != "") {
 
-                    document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) + parseInt(credits[0]);
                     if (parseInt(document.getElementById("noOfCreditsRegistered").value) < 6) {
+                        document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) + parseInt(credits[0]);
 
                         $.ajax({
                             url: 'Student_Page.aspx/StudentRegisterCourse',
@@ -212,11 +270,11 @@
                                 if (data.d == false) {
 
                                     alert("Already Registered in this Course");
-
+                                    document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) - parseInt(credits[0]);
                                 }
                                 else if (data.d == true) {
 
-                                    $("#displayTeachers").show();
+                                    $("#displayTeacher").show();
 
                                 }
 
@@ -229,7 +287,7 @@
                     }
                     else
                         alert("You cannot register another course")
-                    document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) - parseInt(credits[0]);
+
                 }
 
                 else {
@@ -250,7 +308,7 @@
                             }
                             else if (data.d == true) {
 
-                                $("#displayTeachers").show();
+                                $("#displayTeacher").show();
 
                             }
 
@@ -314,187 +372,223 @@
             document.getElementById("test").value = e.options[e.selectedIndex].innerHTML;
             //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").options.selectedItem.text;
             //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").selectedIndex[0].value;
-            
-        }
 
+        }
 
     </script>
     <title></title>
 </head>
 <body>
     <form id="form1" runat="server">
-
-        <div>
-            <h1>Welcome Student!</h1>
-        </div>
-
-        <div style="margin: auto">
-            <table id="studentDataTable">
-                <thead>
-                    <tr>
-                        <th>School ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Contact Number</th>
-                    </tr>
-                </thead>
-            </table>
-            <br />
-
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                Update Profile
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <h1 class="navbar-brand col-md-3 col-lg-2 mr-0 px-3">Welcome Student!</h1>
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="sidebar-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">
+                                    <span data-feather="home"></span>
+                                    Student <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal">
+                                    <span data-feather="file"></span>
+                                    Update profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#courseModal">
+                                    <span data-feather="shopping-cart"></span>
+                                    Register Course
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="displayquiz()">
+                                    <span data-feather="users"></span>
+                                    Take quiz
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="displayUploadAssignment()">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Submit assignment
+                                </a>
+                            </li>
+                        </ul>
 
-        <label>Number of credits registered: </label>
-        <asp:TextBox ID="noOfCreditsRegistered" runat="server">No Of credits registered</asp:TextBox>
+                    </div>
+                </nav>
 
-        <div class="container">
-            <!-- The Modal -->
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
 
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Profile</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-
-                            <table>
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    <div class="table-responsive">
+                        <table id="studentDataTable">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <label>Email address</label></td>
-                                    <td>
-                                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" /></td>
+                                    <th>School ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Contact Number</th>
                                 </tr>
+                            </thead>
+                        </table>
 
-                                <tr>
+                    </div>
 
-                                    <td>
-                                        <label>First Name</label></td>
-                                    <td>
-                                        <input type="text" id="firstName" class="form-control" placeholder="First Name" /></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Last Name</label>
-                                    </td>
-                                    <td>
-                                        <input type="text" id="lastName" class="form-control" placeholder="Last Name" /></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Phone Number</label></td>
-                                    <td>
-                                        <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" title="please enter numbers only" pattern="[0-9]{3}-[0-9]{7}" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Address</label></td>
-                                    <td>
-                                        <input type="text" id="address" class="form-control" placeholder="Address" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Username</label></td>
-                                    <td>
-                                        <input type="text" id="userName" class="form-control" placeholder="UserName" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
 
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" onclick="Validation()" data-dismiss="modal">Update</button>
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Profile</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label>Email address</label></td>
+                                                <td>
+                                                    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" /></td>
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>
+                                                    <label>First Name</label></td>
+                                                <td>
+                                                    <input type="text" id="firstName" class="form-control" placeholder="First Name" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>Last Name</label>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="lastName" class="form-control" placeholder="Last Name" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>Phone Number</label></td>
+                                                <td>
+                                                    <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" title="please enter numbers only" pattern="[0-9]{3}-[0-9]{7}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>Address</label></td>
+                                                <td>
+                                                    <input type="text" id="address" class="form-control" placeholder="Address" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>Username</label></td>
+                                                <td>
+                                                    <input type="text" id="userName" class="form-control" placeholder="UserName" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" onclick="Validation()" data-dismiss="modal">Update</button>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
-                </div>
-            </div>
-
-        </div>
 
 
 
-        <div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#courseModal">
-                Register Course
-            </button>
-        </div>
-        <div id="displayTeachers">
-            <div>
-                <br />
-                <select name="displayTeachers"></select>
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary" id="chooseTeacher" onclick="displaysuccess()">Choose Teacher</button>
-            </div>
-        </div>
-        <div>
-            <br />
-            <button type="button" class="btn btn-primary" id="takeQuiz" onclick="displayquiz()">Take Quiz</button>
-            <br />
-            <br />
-            <br />
-        </div>
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="courseModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
 
-        <div class="container">
-            <!-- The Modal -->
-            <div class="modal" id="courseModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Courses</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
 
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Courses</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
 
-                        <!-- Modal body -->
-                        <div class="modal-body">
+                                        <label>Number of credits registered: </label>
+                                        <asp:TextBox ID="noOfCreditsRegistered" runat="server">No Of credits registered</asp:TextBox>
+                                        <select name="DisplayCourses" id="displayCoursesId"></select>
 
-                            <select name="DisplayCourses" id="displayCoursesId"></select>
+                                        <div id="displayTeacher">
+                                            <br />
+                                            <label>Choose Teacher and mode of study</label>
+                                            <br />
+                                            <div style="float: left">
+                                                <select name="teachers" id="displayTeachers"></select>
+                                            </div>
+                                            <div style="padding-left: 50%">
+                                                <select name="modeOfStudy" id="displayModeOfStudy">
+                                                    <option value="online">Online </option>
+                                                    <option value="live">Live </option>
+                                                </select>
+                                            </div>
 
-                        </div>
+                                            <div>
+                                                <button type="button" class="btn btn-primary" id="chooseTeacher" onclick="displaysuccess()" data-dismiss="modal">Choose Teacher</button>
+                                            </div>
+                                        </div>
 
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="readData()">Register</button>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" onclick="readData()">Register</button>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
 
                     </div>
-                </div>
+                    <div id="uploadAssignment">
+
+                        <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
+                        <input type="hidden" id="test" name="Test" />
+                        <input type="hidden" id="test2" name="Test2" />
+                        <br />
+                        <asp:FileUpload ID="FileUpload1" runat="server" />
+                        <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
+                        <br />
+                        <br />
+                        <asp:Label runat="server" ID="StatusLabel" Text="Upload status: " />
+                    </div>
+                </main>
             </div>
-
         </div>
-        <div>
-            <button type="button" class="btn btn-primary" onclick="displayUploadAssignment()">
-                Upload Assignment
-            </button>
-        </div>
-
-        <div id="uploadAssignment">
-
-            <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
-            <input type="hidden" id="test" name="Test"/>
-            <input type="hidden" id="test2" name="Test2"/>
-            <br />
-            <asp:FileUpload ID="FileUpload1" runat="server" />
-            <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click"/>
-            <br />
-            <br />
-            <asp:Label runat="server" ID="StatusLabel" Text="Upload status: " />
-        </div>
-
     </form>
 
 </body>

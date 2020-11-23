@@ -104,5 +104,10 @@ namespace BLL
         {
             new Dal().EditCourse(course, courseName, creditHours);
         }
+
+        public void ModeOfStudy(string email, string course, string mode)
+        {
+            new Dal().ModeOfStudy(email, course, mode);
+        }
     }
 }

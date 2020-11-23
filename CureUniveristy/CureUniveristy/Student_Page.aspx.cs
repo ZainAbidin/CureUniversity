@@ -26,11 +26,11 @@ namespace CureUniveristy
             string email = this.Request.Form.Get("test2");
             string course = this.Request.Form.Get("test");
             new Bll().AddAssignmnetToDatabase(email, course, FN, contentType, bytes);
-         
-            
+
+
 
         }
-    
+
 
         [WebMethod(EnableSession = true)]
         public static string GetStudentByID(string email)
@@ -78,6 +78,12 @@ namespace CureUniveristy
             return js.Serialize((new Bll()).DisplayRegisteredCourses(email));
         }
 
+        [WebMethod(EnableSession = true)]
+
+        public static void ModeOfStudy(string email, string course, string mode)
+        {
+            new Bll().ModeOfStudy(email, course, mode);
+        }
 
     }
 }
