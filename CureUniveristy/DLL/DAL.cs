@@ -31,19 +31,15 @@ namespace DAL
                     if (!string.IsNullOrEmpty(role))
                     {
                         if (role.Equals("Student"))
-                        {
                             returnvar = 0;
-                        }
-                        else if (role.Equals("Teacher"))
-                        {
-                            returnvar = 1;
-                        }
-                        else if (role.Equals("Admin"))
-                        {
-                            return 2;
-                        }
-                        return returnvar;
 
+                        else if (role.Equals("Teacher"))
+                            returnvar = 1;
+
+                        else if (role.Equals("Admin"))
+                            return 2;
+
+                        return returnvar;
                     }
                     else
                     {
@@ -82,11 +78,11 @@ namespace DAL
                     {
                         if (userExistenceCheck.Equals("0"))
                         {
-                            return false; /////////user already exists
+                            return false; //user already exists
                         }
                         else
                         {
-                            return true; /////// NEW USER IS TO BE REGISTERED
+                            return true; //NEW USER IS TO BE REGISTERED
                         }
                     }
 
@@ -112,6 +108,7 @@ namespace DAL
                     cmnd.CommandType = System.Data.CommandType.StoredProcedure;
                     connection.Open();
                     SqlDataReader rdr = cmnd.ExecuteReader();
+
                     while (rdr.Read())
                     {
                         Students student = new Students();
@@ -155,15 +152,11 @@ namespace DAL
                     if (!string.IsNullOrEmpty(checkUpdate))
                     {
                         if (checkUpdate.Equals("0"))
-                        {
-                            return false; ///////// didnt update
-                        }
-                        else
-                        {
-                            return true; /////// updated
-                        }
-                    }
+                            return false; // didnt update
 
+                        else
+                            return true; // updated                        
+                    }
                     return false;
                 }
             }
@@ -233,15 +226,10 @@ namespace DAL
                     if (!string.IsNullOrEmpty(checkUpdate))
                     {
                         if (checkUpdate.Equals("0"))
-                        {
-                            return false; ///////// updated
-                        }
+                            return false; // updated                        
                         else
-                        {
-                            return true; /////// not updated
-                        }
+                            return true; // not updated                        
                     }
-
                     return true;
                 }
             }
@@ -263,6 +251,7 @@ namespace DAL
                     cmnd.CommandType = CommandType.StoredProcedure;
                     connection.Open();
                     SqlDataReader rdr = cmnd.ExecuteReader();
+
                     while (rdr.Read())
                     {
                         Teacher teacher = new Teacher();
@@ -294,6 +283,7 @@ namespace DAL
                     cmnd.CommandType = CommandType.StoredProcedure;
                     connection.Open();
                     SqlDataReader rdr = cmnd.ExecuteReader();
+
                     while (rdr.Read())
                     {
                         Course course = new Course();
@@ -304,7 +294,7 @@ namespace DAL
                     return courses;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return courses;
             }
@@ -318,30 +308,28 @@ namespace DAL
                 {
                     SqlCommand cmnd = new SqlCommand("spCourseRegister", connection);
                     cmnd.CommandType = CommandType.StoredProcedure;
+
                     cmnd.Parameters.AddWithValue("@Email", email);
                     cmnd.Parameters.AddWithValue("@CourseName", course);
+
                     connection.Open();
                     string checkRegistration = Convert.ToString(cmnd.ExecuteScalar());
+
                     if (!string.IsNullOrEmpty(checkRegistration))
                     {
                         if (checkRegistration.Equals("0"))
-                        {
-                            return false; ///////// already registered
-                        }
+                            return false; // already registered                        
                         else
-                        {
-                            return true; /////// registered
-                        }
+                            return true; // registered
                     }
 
                     return true;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return true;
             }
-
         }
 
         public int GetStudnetCreditHours(string email)
@@ -360,7 +348,7 @@ namespace DAL
                     return Convert.ToInt32((cmnd.ExecuteScalar()));
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return 0;
             }
@@ -378,6 +366,7 @@ namespace DAL
                     cmnd.Parameters.AddWithValue("@CourseName", courseName);
                     connection.Open();
                     SqlDataReader rdr = cmnd.ExecuteReader();
+
                     while (rdr.Read())
                     {
                         Teacher teacher = new Teacher();
@@ -387,7 +376,7 @@ namespace DAL
                     return teachers;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 return teachers;
             }
@@ -405,6 +394,7 @@ namespace DAL
                     cmnd.Parameters.AddWithValue("@Email", email);
                     connection.Open();
                     SqlDataReader rdr = cmnd.ExecuteReader();
+
                     while (rdr.Read())
                     {
                         Course course = new Course();
@@ -428,19 +418,42 @@ namespace DAL
                 {
                     SqlCommand cmnd = new SqlCommand("spUploadAssignment", connection);
                     cmnd.CommandType = CommandType.StoredProcedure;
+
                     cmnd.Parameters.AddWithValue("@Email", email);
                     cmnd.Parameters.AddWithValue("@Course", course);
                     cmnd.Parameters.AddWithValue("@Assignment_Name", name);
                     cmnd.Parameters.AddWithValue("@Assignment_Type", type);
                     cmnd.Parameters.AddWithValue("@Assignment_Data", data);
+
                     connection.Open();
                     cmnd.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
-            {
+            { }
+        }
 
+        public void AddQuizToDatabase(string email, string course, string name, string type, byte[] data)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spUploadQuiz", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+                    cmnd.Parameters.AddWithValue("@Quiz_Name", name);
+                    cmnd.Parameters.AddWithValue("@Quiz_Type", type);
+                    cmnd.Parameters.AddWithValue("@Quiz_Data", data);
+
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
             }
+            catch (Exception e)
+            { }
         }
 
         public void EditCourse(string course, string courseName, int creditHours)
@@ -451,17 +464,17 @@ namespace DAL
                 {
                     SqlCommand cmnd = new SqlCommand("spEditCourse", connection);
                     cmnd.CommandType = CommandType.StoredProcedure;
+
                     cmnd.Parameters.AddWithValue("@CourseRefrence", course);
                     cmnd.Parameters.AddWithValue("@CourseName", courseName);
                     cmnd.Parameters.AddWithValue("@CourseCredits", creditHours);
+
                     connection.Open();
                     cmnd.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
-            {
-
-            }
+            { }
         }
 
         public void ModeOfStudy(string email, string course, string mode)
@@ -472,9 +485,188 @@ namespace DAL
                 {
                     SqlCommand cmnd = new SqlCommand("spModeOfStudy", connection);
                     cmnd.CommandType = CommandType.StoredProcedure;
+
                     cmnd.Parameters.AddWithValue("@Course", course);
                     cmnd.Parameters.AddWithValue("@Email", email);
                     cmnd.Parameters.AddWithValue("@Mode", mode);
+
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            { }
+        }
+
+        public void ChooseTeacher(string email, string name)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spChooseTeacher", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@name", name);
+                    cmnd.Parameters.AddWithValue("@Email", email);
+
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            { }
+        }
+
+        public List<Assignment> ShowAssignments(string email, string course)
+        {
+            List<Assignment> assignments = new List<Assignment>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spShowAssignments", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Assignment assignment = new Assignment();
+                        assignment.name = rdr["Assignment_Name"].ToString();
+                        assignments.Add(assignment);
+                    }
+                    return assignments;
+                }
+            }
+            catch (Exception e)
+            {
+                return assignments;
+            }
+        }
+
+        //public List<Course> ShowAssignments(string email, string course)
+        //{
+        //    List<Course> courses = new List<Course>();
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        //        {
+
+        //            SqlCommand cmnd = new SqlCommand("spShowAssignments", connection);
+        //            cmnd.CommandType = CommandType.StoredProcedure;
+        //            cmnd.Parameters.AddWithValue("@Email", email);
+        //            cmnd.Parameters.AddWithValue("@Course", course);
+        //            connection.Open();
+        //            SqlDataReader rdr = cmnd.ExecuteReader();
+        //            while (rdr.Read())
+        //            {
+
+        //                Course cours = new Course();
+        //                cours.assignment.name = rdr["Assignment_Name"].ToString();
+        //                courses.Add(cours);
+
+        //            }
+        //            return assignments;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return assignments;
+
+        //    }
+        //}
+
+        public void UploadAssignmentScore(string email, string course, int score)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spUploadAssignmentScore", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+                    cmnd.Parameters.AddWithValue("@Score", score);
+
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            { }
+        }
+
+        public string DisplayMessages(string email)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spReadMessage", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    connection.Open();
+
+                    Students std = new Students();
+                    std.message.message = Convert.ToString(cmnd.ExecuteScalar());
+                    return std.message.message;
+                }
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+
+        public List<Students> ViewRegisteredStudentstoTeacher(string email)
+        {
+            List<Students> students = new List<Students>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spShowStudentsTaught", connection);
+                    cmnd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    connection.Open();
+                    SqlDataReader rdr = cmnd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Students student = new Students();
+                        student.ID = Convert.ToInt32(rdr["School_ID"]);
+                        student.firstName = rdr["First_Name"].ToString();
+                        student.email = rdr["Email"].ToString();
+                        students.Add(student);
+                    }
+                    return students;
+                }
+            }
+            catch (Exception e)
+            {
+                return students;
+            }
+        }
+
+        public void sendMessage(string reference, string email, string message)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spMessage", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Email", email);
+                    cmnd.Parameters.AddWithValue("@Reference", reference);
+                    cmnd.Parameters.AddWithValue("@message", message);
+
                     connection.Open();
                     cmnd.ExecuteNonQuery();
                 }
@@ -484,7 +676,47 @@ namespace DAL
 
             }
         }
+
+        public void TeacherBlockStudent(string teacher, string student)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spTeacherBlockStudent", connection);
+
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Email", student);
+                    cmnd.Parameters.AddWithValue("@Reference", teacher);
+
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public void AdminSendMessage(string message, int schoolId)
+        {
+            //try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spAdminMessage", connection);
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Schoolid", schoolId);
+                    cmnd.Parameters.AddWithValue("@message", message);
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            //catch
+            //{
+
+            //}
+        }
     }
 }
-
-

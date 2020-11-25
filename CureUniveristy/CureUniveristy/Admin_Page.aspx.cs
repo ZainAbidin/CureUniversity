@@ -1,7 +1,7 @@
-﻿using System;
-using System.Web.Services;
-using BLL;
+﻿using BLL;
 using Newtonsoft.Json;
+using System;
+using System.Web.Services;
 
 namespace CureUniveristy
 {
@@ -15,9 +15,7 @@ namespace CureUniveristy
         [WebMethod(EnableSession = true)]
         public static string ViewAllStudentstoAdmin()
         {
-
             return JsonConvert.SerializeObject((new Bll()).ViewAllStudentstoAdmin());
-
         }
 
         [WebMethod(EnableSession = true)]
@@ -29,7 +27,13 @@ namespace CureUniveristy
         [WebMethod(EnableSession = true)]
         public static bool BlockOrSuspendEntity(int choice, int schoolId)
         {
-            return (new Bll()).BlockOrSuspendEntity(choice, schoolId);
+            return (new Bll()).BlockOrSuspendEntity( choice, schoolId);
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static void sendMessage(string message, string schoolId)
+        {
+            new Bll().AdminSendMessage(message, Int32.Parse(schoolId));
         }
     }
 }

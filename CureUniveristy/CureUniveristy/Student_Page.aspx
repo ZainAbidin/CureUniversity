@@ -148,7 +148,6 @@
 
         function PageReady() {
             $("#displayTeacher").hide();
-            $("#uploadAssignment").hide();
 
             var EMAIL = getUrlVars()["email"];
             $.ajax({
@@ -208,6 +207,20 @@
                 }
             });
 
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayMessages',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+                    document.getElementById("message").value = data.d;
+                }
+            });
+
+
+
         }
 
         function displaysuccess() {
@@ -225,13 +238,30 @@
 
             var mode = modeSelection.options[modeSelection.selectedIndex].innerHTML;
 
+            var teacherSelection = document.getElementById('displayTeachers');
+
+            var name = teacherSelection.options[teacherSelection.selectedIndex].innerHTML;
+
             $.ajax({
                 url: 'Student_Page.aspx/ModeOfStudy',
                 method: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
                 async: false,
-                data: JSON.stringify({ "email": EMAIL, "course": courseName, "mode": mode}),
+                data: JSON.stringify({ "email": EMAIL, "course": courseName, "mode": mode }),
+                success: function (data) {
+
+                }
+
+            });
+
+            $.ajax({
+                url: 'Student_Page.aspx/ChooseTeacher',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL, "name": name }),
                 success: function (data) {
 
                 }
@@ -341,12 +371,8 @@
             });
         }
 
-        function displayquiz() {
-            alert("Hurray! No quiz uploaded yet");
-        }
 
         function displayUploadAssignment() {
-            $("#uploadAssignment").show();
             var EMAIL = getUrlVars()["email"];
             $.ajax({
                 url: 'Student_Page.aspx/DisplayRegisteredCourses',
@@ -366,19 +392,72 @@
                     }
 
                 }
+
             });
-            document.getElementById("test2").value = EMAIL;
             var e = document.getElementById('displayRegisteredCoursesId');
+
             document.getElementById("test").value = e.options[e.selectedIndex].innerHTML;
-            //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").options.selectedItem.text;
-            //document.getElementById("test").value = document.getElementById("displayRegisteredCoursesId").selectedIndex[0].value;
+
+            document.getElementById("test2").value = EMAIL;
+
 
         }
+
+        function displayUploadQuiz() {
+            var EMAIL = getUrlVars()["email"];
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayRegisteredCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++) {
+
+                        $('#displayRegisteredCoursesQuizId').append(new Option(good[registeredCourse], registeredCourse));
+
+                    }
+
+                }
+            });
+
+            document.getElementById("test3").value = EMAIL;
+
+            var e = document.getElementById('displayRegisteredCoursesQuizId');
+
+            document.getElementById("test1").value = e.options[e.selectedIndex].innerHTML;
+
+        }
+
+        //var myIndex = 0;
+        //carousel();
+
+        //function carousel() {
+        //    var i;
+        //    var x = document.getElementsByClassName("mySlides");
+        //    for (i = 0; i < x.length; i++) {
+        //        x[i].style.display = "none";
+        //    }
+        //    myIndex++;
+        //    if (myIndex > x.length) { myIndex = 1 }
+        //    x[myIndex - 1].style.display = "block";
+        //    setTimeout(carousel, 9000);
+        //}
 
     </script>
     <title></title>
 </head>
-<body>
+<body <%--class="w3-content w3-section"--%>>
+
+<%--    <img class="mySlides w3-animate-fading" src="images/1.jpg" style="width:100%"/>
+    <img class="mySlides w3-animate-fading" src="images/2.jpg"style="width:100%"/>
+    <img class="mySlides w3-animate-fading" src="images/3.jpg"style="width:100%"/>
+    <img class="mySlides w3-animate-fading" src="images/4.jpg"style="width:100%"/>--%>
+    
     <form id="form1" runat="server">
         <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <h1 class="navbar-brand col-md-3 col-lg-2 mr-0 px-3">Welcome Student!</h1>
@@ -415,13 +494,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="displayquiz()">
+                                <a class="nav-link" href="#" onclick="displayUploadQuiz()" data-toggle="modal" data-target='#uploadQuizModal'>
                                     <span data-feather="users"></span>
                                     Take quiz
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="displayUploadAssignment()">
+                                <a class="nav-link" href="#" onclick="displayUploadAssignment()" data-toggle="modal" data-target="#uploadAssignmentModal">
                                     <span data-feather="bar-chart-2"></span>
                                     Submit assignment
                                 </a>
@@ -448,8 +527,17 @@
                         </table>
 
                     </div>
-
-
+                    <br />
+                    <div>
+                        <div>
+                            <h3>Messages</h3>
+                        </div>
+                        <%--<input type="text" id="message" name="message" style="border: hidden" />--%>
+                        <div>
+                            <textarea rows="4" cols="50" id="message" name="message" <%--style="border: hidden"--%>></textarea>
+                        </div>
+                    </div>
+                    <!--------------------------------------------------------MODAL TO UPDATE PROFILE------------------------------------------------->
                     <div class="container">
                         <!-- The Modal -->
                         <div class="modal" id="myModal">
@@ -521,9 +609,8 @@
                         </div>
 
                     </div>
-
-
-
+                    <!----------------------------------------------------------------------------------------------------------------------------------->
+                    <!--------------------------------------------------------MODAL TO UPLOAD REGISTER COURSE-------------------------------------------->
                     <div class="container">
                         <!-- The Modal -->
                         <div class="modal" id="courseModal">
@@ -548,9 +635,11 @@
                                             <label>Choose Teacher and mode of study</label>
                                             <br />
                                             <div style="float: left">
+                                                <label>Teacher: </label>
                                                 <select name="teachers" id="displayTeachers"></select>
                                             </div>
                                             <div style="padding-left: 50%">
+                                                <label>Mode: </label>
                                                 <select name="modeOfStudy" id="displayModeOfStudy">
                                                     <option value="online">Online </option>
                                                     <option value="live">Live </option>
@@ -574,18 +663,72 @@
                         </div>
 
                     </div>
-                    <div id="uploadAssignment">
+                    <!----------------------------------------------------------------------------------------------------------------------------------->
+                    <!--------------------------------------------------------MODAL TO UPLOAD ASSIGNMENT------------------------------------------------->
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="uploadAssignmentModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
 
-                        <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
-                        <input type="hidden" id="test" name="Test" />
-                        <input type="hidden" id="test2" name="Test2" />
-                        <br />
-                        <asp:FileUpload ID="FileUpload1" runat="server" />
-                        <asp:Button runat="server" ID="UploadButton" Text="Upload" OnClick="UploadButton_Click" />
-                        <br />
-                        <br />
-                        <asp:Label runat="server" ID="StatusLabel" Text="Upload status: " />
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Upload</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <label>Select course: </label>
+                                        <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesId"></select>
+                                        <input type="hidden" id="test" name="Test" />
+                                        <input type="hidden" id="test2" name="Test2" />
+                                        <br />
+                                        <asp:FileUpload ID="FileUpload1" runat="server" />
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <asp:Button runat="server" ID="UploadButton" class="btn btn-danger" data-dismiss="modal" UseSubmitBehavior="false" Text="Upload" OnClick="UploadButton_Click" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <!--------------------------------------------------------------------------------------------------------------------------------->
+                    <!--------------------------------------------------------MODAL TO UPLOAD QUIZ----------------------------------------------------->
+
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="uploadQuizModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Upload</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <label>Select course: </label>
+                                        <select name="DisplayRegisteredCourses" id="displayRegisteredCoursesQuizId"></select>
+                                        <input type="hidden" id="test1" name="Test1" />
+                                        <input type="hidden" id="test3" name="Test3" />
+                                        <br />
+                                        <asp:FileUpload ID="FileUpload2" runat="server" />
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <asp:Button runat="server" ID="Button1" class="btn btn-danger" data-dismiss="modal" UseSubmitBehavior="false" Text="Upload" OnClick="UploadButton_Click1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--------------------------------------------------------------------------------------------------------------------------------->
                 </main>
             </div>
         </div>

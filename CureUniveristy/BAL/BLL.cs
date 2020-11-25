@@ -74,11 +74,12 @@ namespace BLL
         {
             List<Teacher> teacherlist = new List<Teacher>();
             List<string> compiledList = new List<string>();
+
             teacherlist = (new Dal().DisplayTeachersToStudent(courseName));
+
             foreach (var teacher in teacherlist)
-            {
                 compiledList.Add(teacher.firstName);
-            }
+
             return compiledList;
         }
 
@@ -100,6 +101,11 @@ namespace BLL
             new Dal().AddAssignmnetToDatabase(email, course, name, type, data);
         }
 
+        public void AddQuizToDatabase(string email, string course, string name, string type, byte[] data)
+        {
+            new Dal().AddQuizToDatabase(email, course, name, type, data);
+        }
+
         public void EditCourse(string course, string courseName, int creditHours)
         {
             new Dal().EditCourse(course, courseName, creditHours);
@@ -108,6 +114,67 @@ namespace BLL
         public void ModeOfStudy(string email, string course, string mode)
         {
             new Dal().ModeOfStudy(email, course, mode);
+        }
+
+        public void ChooseTeacher(string email, string name)
+        {
+            new Dal().ChooseTeacher(email, name);
+        }
+
+        public List<string> ShowAssignments(string email, string course)
+        {
+            List<Assignment> assignmentList = new List<Assignment>();
+            List<string> compiledList = new List<string>();
+
+            assignmentList = new Dal().ShowAssignments(email, course);
+
+            foreach (var assignment in assignmentList)
+                compiledList.Add(assignment.name);
+
+            return compiledList;
+        }
+
+        //public List<string> ShowAssignments(string email, string course)
+        //{
+        //    List<Course> assignmentList = new List<Course>();
+        //    List<string> compiledList = new List<string>();
+
+        //    assignmentList = new Dal().ShowAssignments(email, course);
+        //    foreach (var assignment in assignmentList)
+        //    {
+        //        compiledList.Add(assignment.name);
+        //    }
+        //    return compiledList;
+        //}
+
+        public void UploadAssignmentScore(string email, string course, int score)
+        {
+            new Dal().UploadAssignmentScore(email, course, score);
+        }
+
+        public string DisplayMessages(string email)
+        {
+            return new Dal().DisplayMessages(email);
+        }
+
+        public List<Students> ViewRegisteredStudentstoTeacher(string email)
+        {
+            return new Dal().ViewRegisteredStudentstoTeacher(email);
+        }
+
+        public void sendMessage(string reference, string email, string message)
+        { 
+            new Dal().sendMessage(reference, email, message); 
+        }
+        
+        public void TeacherBlockStudent(string teacher, string student)
+        {
+            new Dal().TeacherBlockStudent(teacher, student);
+        }
+
+        public void AdminSendMessage(string message, int schoolId)
+        {
+            new Dal().AdminSendMessage(message, schoolId);
         }
     }
 }

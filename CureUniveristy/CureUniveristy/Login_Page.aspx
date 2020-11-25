@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <!--Bootsrap 4 CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
     <!--Fontawesome CDN-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous" />
 
@@ -13,6 +13,7 @@
     <link href="Login_Page.css" rel="stylesheet" />
     <title></title>
     <script src="Scripts/jquery-3.3.1.js"></script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -22,7 +23,6 @@
                 var password = $('#inputPassword').val();
 
                 $.ajax({
-
                     type: "post",
                     url: "Login_Page.aspx/CheckCredentials",
                     async: true,
@@ -31,21 +31,17 @@
                     dataType: 'json',
                     success: function (data) {
 
-                        if (data.d == 0) {
-
+                        if (data.d == 0)
                             window.location.href = "Student_Page.aspx?email=" + email;
 
-                        }
-                        else if (data.d == 1) {
-
+                        else if (data.d == 1)
                             window.location.href = "Teacher_Page.aspx?email=" + email;
-                        }
-                        else if (data.d == 2) {
+
+                        else if (data.d == 2)
                             window.location.href = "Admin_Page.aspx?email=" + email;
-                        }
-                        else {
-                            alert("Wrong credentials or user not registered yet!")
-                        }
+
+                        else
+                            alert("Wrong credentials or user not registered yet!");
                     },
                     error: function () {
                         alert("Failure");
@@ -69,16 +65,16 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="email" id="inputEmail" class="form-control" placeholder="email"/>
+                            <input type="email" id="inputEmail" class="form-control" placeholder="email" />
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <input type="password" id="inputPassword" class="form-control" placeholder="password">
+                            <input type="password" id="inputPassword" class="form-control" placeholder="password"/>
                         </div>
                         <div class="form-group">
-                            <input type="submit" id="btnSignin" value="Login" class="btn float-right login_btn"/>
+                            <input type="submit" id="btnSignin" value="Login" class="btn float-right login_btn" />
                         </div>
                     </form>
                 </div>

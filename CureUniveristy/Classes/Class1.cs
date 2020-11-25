@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Classes
 {
@@ -11,6 +7,8 @@ namespace Classes
         public string name { get; set; }
         public int creditHours { get; set; }
         public string modeOfStudy { get; set; }
+
+        public Assignment assignment;
 
     }
     public class Users
@@ -29,10 +27,12 @@ namespace Classes
         public Students()
         {
             CourseList = new List<Course>();
+            message = new Messages(); 
         }
 
         List<Course> CourseList { get; set; }
 
+        public Messages message;
 
     }
 
@@ -41,8 +41,9 @@ namespace Classes
         public Teacher()
         {
             CourseList = new List<Course>();
+            message = new Messages();
         }
-
+        Messages message = new Messages();
         List<Course> CourseList { get; set; }
 
     }
@@ -51,10 +52,19 @@ namespace Classes
     {
         public Admin()
         {
-
+            message = new Messages();
         }
-
+        Messages message = new Messages();
     }
 
+    public class Assignment
+    {
+        public string name { set; get; }
+    }
+
+    public class Messages
+    {
+        public string message { set; get; }
+    }
 
 }

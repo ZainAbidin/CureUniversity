@@ -15,22 +15,38 @@ namespace CureUniveristy
 
         }
 
-        protected void UploadButton_Click(object sender, EventArgs e)
+        public void UploadButton_Click(object sender, EventArgs e)
         {
             string FN = "";
-            FN = Path.GetFileName(FileUpload1.PostedFile.FileName);
-            string contentType = FileUpload1.PostedFile.ContentType;
-            Stream fs = FileUpload1.PostedFile.InputStream;
-            BinaryReader br = new BinaryReader(fs);
-            byte[] bytes = br.ReadBytes((Int32)fs.Length);
             string email = this.Request.Form.Get("test2");
             string course = this.Request.Form.Get("test");
+            string contentType = FileUpload1.PostedFile.ContentType;
+
+            FN = Path.GetFileName(FileUpload1.PostedFile.FileName);
+            Stream fs = FileUpload1.PostedFile.InputStream;
+
+            BinaryReader br = new BinaryReader(fs);
+            byte[] bytes = br.ReadBytes((Int32)fs.Length);
+
             new Bll().AddAssignmnetToDatabase(email, course, FN, contentType, bytes);
-
-
 
         }
 
+        public void UploadButton_Click1(object sender, EventArgs e)
+        {
+            string FN = "";
+            string email = this.Request.Form.Get("test3");
+            string course = this.Request.Form.Get("test1");
+            string contentType = FileUpload2.PostedFile.ContentType;
+
+            FN = Path.GetFileName(FileUpload2.PostedFile.FileName);
+            Stream fs = FileUpload2.PostedFile.InputStream;
+            BinaryReader br = new BinaryReader(fs);
+            byte[] bytes = br.ReadBytes((Int32)fs.Length);
+
+            new Bll().AddQuizToDatabase(email, course, FN, contentType, bytes);
+
+        }
 
         [WebMethod(EnableSession = true)]
         public static string GetStudentByID(string email)
@@ -79,11 +95,22 @@ namespace CureUniveristy
         }
 
         [WebMethod(EnableSession = true)]
-
         public static void ModeOfStudy(string email, string course, string mode)
         {
             new Bll().ModeOfStudy(email, course, mode);
         }
 
+        [WebMethod(EnableSession = true)]
+        public static void ChooseTeacher(string email, string name)
+        {
+            new Bll().ChooseTeacher(email, name);
+        }
+
+        [WebMethod (EnableSession = true)]
+        public static string DisplayMessages(string email)
+        {
+            return new Bll().DisplayMessages(email);
+        }
+
     }
-}
+} 

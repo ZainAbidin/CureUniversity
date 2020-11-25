@@ -129,8 +129,13 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="images\1.jpg" />
+    <Content Include="images\2.jpg" />
+    <Content Include="images\3.jpg" />
+    <Content Include="images\4.jpg" />
     <Content Include="images\cover.png" />
     <Content Include="images\Login_Page_Background.jpg" />
+    <Content Include="images\page.jpg" />
     <Content Include="images\Signup_Page.jpg" />
     <Content Include="Login_Page.aspx" />
     <Content Include="Login_Page.css" />
