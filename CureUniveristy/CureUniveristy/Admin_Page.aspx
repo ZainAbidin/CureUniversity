@@ -203,7 +203,8 @@
             </button>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>
+<%--                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>--%>
+                    <asp:LinkButton ID="LinkButton1" class="nav-link" runat="server" OnClick="LinkButton1_Click">Sign out</asp:LinkButton>
                 </li>
             </ul>
         </nav>
@@ -212,12 +213,6 @@
                 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="sidebar-sticky pt-3">
                         <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">
-                                    <span data-feather="home"></span>
-                                    Student <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" onclick="showstudentdiv()">
                                     <span data-feather="file"></span>

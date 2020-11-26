@@ -40,7 +40,15 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <style>
+        html, body {
+            background-image: url("images/2.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100%;
+            font-family: 'Numans', sans-serif;
+        }
+    </style>
     <script type="text/javascript">
 
         function Validation() {
@@ -186,14 +194,10 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var course = 0; course < good.length; course++) {
-
+                    for (var course = 0; course < good.length; course++)
                         $('#displayCoursesId').append(new Option(good[course], course));
-
-                    }
                 }
             });
-
 
             $.ajax({
                 url: 'Student_Page.aspx/GetStudnetCreditHours',
@@ -218,12 +222,11 @@
                     document.getElementById("message").value = data.d;
                 }
             });
-
-
-
+            hide();
         }
 
         function displaysuccess() {
+
             alert("You have been Registered successfully");
 
             var selection = document.getElementById('displayCoursesId');
@@ -297,27 +300,22 @@
                             async: false,
                             data: JSON.stringify({ "email": EMAIL, "course": courseName }),
                             success: function (data) {
+
                                 if (data.d == false) {
 
                                     alert("Already Registered in this Course");
                                     document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) - parseInt(credits[0]);
                                 }
-                                else if (data.d == true) {
-
+                                else if (data.d == true)
                                     $("#displayTeacher").show();
-
-                                }
-
                             },
                             error: function () {
                                 alert("Failure");
                             }
                         })
-
                     }
                     else
-                        alert("You cannot register another course")
-
+                        alert("You cannot register another course");
                 }
 
                 else {
@@ -330,24 +328,16 @@
                         async: false,
                         data: JSON.stringify({ "email": EMAIL, "course": courseName }),
                         success: function (data) {
-                            if (data.d == false) {
 
-
+                            if (data.d == false)
                                 alert("Already Registered in this Course");
-
-                            }
-                            else if (data.d == true) {
-
+                            else if (data.d == true)
                                 $("#displayTeacher").show();
-
-                            }
-
                         },
                         error: function () {
                             alert("Failure");
                         }
                     })
-
                 }
             }
 
@@ -358,15 +348,13 @@
                 contentType: 'application/json',
                 async: false,
                 data: JSON.stringify({ "courseName": courseName }),
+
                 success: function (data) {
 
                     var good = JSON.parse(data.d);
 
-                    for (var teacher = 0; teacher < good.length; teacher++) {
-
+                    for (var teacher = 0; teacher < good.length; teacher++)
                         $('#displayTeachers').append(new Option(good[teacher], teacher));
-
-                    }
                 }
             });
         }
@@ -385,22 +373,14 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++) {
-
+                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++)
                         $('#displayRegisteredCoursesId').append(new Option(good[registeredCourse], registeredCourse));
-
-                    }
-
                 }
-
             });
+
             var e = document.getElementById('displayRegisteredCoursesId');
-
             document.getElementById("test").value = e.options[e.selectedIndex].innerHTML;
-
             document.getElementById("test2").value = EMAIL;
-
-
         }
 
         function displayUploadQuiz() {
@@ -416,48 +396,105 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++) {
-
+                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++)
                         $('#displayRegisteredCoursesQuizId').append(new Option(good[registeredCourse], registeredCourse));
-
-                    }
-
                 }
             });
 
             document.getElementById("test3").value = EMAIL;
-
             var e = document.getElementById('displayRegisteredCoursesQuizId');
-
             document.getElementById("test1").value = e.options[e.selectedIndex].innerHTML;
+        }
+
+        function displayRegisteredCourseForvideoDownload() {
+            var EMAIL = getUrlVars()["email"];
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayRegisteredCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var registeredCourse = 0; registeredCourse < good.length; registeredCourse++)
+                        $('#chooseCourseForDownloadVideo').append(new Option(good[registeredCourse], registeredCourse));
+                }
+            });
 
         }
 
-        //var myIndex = 0;
-        //carousel();
+        function displayTeachersForvideoDownload() {
+            var selection = document.getElementById('chooseCourseForDownloadVideo');
 
-        //function carousel() {
-        //    var i;
-        //    var x = document.getElementsByClassName("mySlides");
-        //    for (i = 0; i < x.length; i++) {
-        //        x[i].style.display = "none";
-        //    }
-        //    myIndex++;
-        //    if (myIndex > x.length) { myIndex = 1 }
-        //    x[myIndex - 1].style.display = "block";
-        //    setTimeout(carousel, 9000);
-        //}
+            var courseName = selection.options[selection.selectedIndex].innerHTML;
+
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayTeacherToStudent',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "courseName": courseName }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var teacher = 0; teacher < good.length; teacher++)
+                        $('#chooseTeacherForDownloadVideo').append(new Option(good[teacher], teacher));
+                }
+            });
+
+            $("#selectTeacherDiv").show();
+        }
+
+
+        function displayVideos() {
+
+            var selection = document.getElementById('chooseCourseForDownloadVideo');
+
+            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
+
+            var selection = document.getElementById('chooseTeacherForDownloadVideo');
+
+            var teacher = selection.options[selection.selectedIndex].innerHTML;
+            $.ajax({
+                url: 'Student_Page.aspx/DownloadVideo',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "course": selectedCourse, "teacher": teacher }),
+                success: function (data) {
+                    $('#videosTable').dataTable({
+                        data: JSON.parse(data.d),
+                        columns: [
+                            { 'data': 'VideoName' },
+                            { 'data': 'VideoLink' },
+                        ],
+                        bPaginate: false,
+                        bInfo: false
+                    });
+                }
+            });
+
+            $("#showVideosDiv").show();
+        }
+
+        function hide() {
+            $("#showVideosDiv").hide();
+            $("#selectTeacherDiv").hide();
+            nullifySelects();
+        }
+
+
 
     </script>
     <title></title>
 </head>
-<body <%--class="w3-content w3-section"--%>>
-
-<%--    <img class="mySlides w3-animate-fading" src="images/1.jpg" style="width:100%"/>
-    <img class="mySlides w3-animate-fading" src="images/2.jpg"style="width:100%"/>
-    <img class="mySlides w3-animate-fading" src="images/3.jpg"style="width:100%"/>
-    <img class="mySlides w3-animate-fading" src="images/4.jpg"style="width:100%"/>--%>
-    
+<body>
     <form id="form1" runat="server">
         <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <h1 class="navbar-brand col-md-3 col-lg-2 mr-0 px-3">Welcome Student!</h1>
@@ -466,7 +503,8 @@
             </button>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>
+                    <%--<a class="nav-link" href="Login_Page.aspx">Sign out</a>--%>
+                    <asp:LinkButton ID="LinkButton1" class="nav-link" runat="server" OnClick="LinkButton1_Click">Sign out</asp:LinkButton>
                 </li>
             </ul>
         </nav>
@@ -505,6 +543,12 @@
                                     Submit assignment
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="displayRegisteredCourseForvideoDownload()" data-toggle="modal" data-target="#downloadVideoModal">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Download Videos
+                                </a>
+                            </li>
                         </ul>
 
                     </div>
@@ -531,10 +575,7 @@
                     <div>
                         <div>
                             <h3>Messages</h3>
-                        </div>
-                        <%--<input type="text" id="message" name="message" style="border: hidden" />--%>
-                        <div>
-                            <textarea rows="4" cols="50" id="message" name="message" <%--style="border: hidden"--%>></textarea>
+                            <textarea rows="4" cols="50" id="message" name="message"></textarea>
                         </div>
                     </div>
                     <!--------------------------------------------------------MODAL TO UPDATE PROFILE------------------------------------------------->
@@ -579,7 +620,7 @@
                                                 <td>
                                                     <label>Phone Number</label></td>
                                                 <td>
-                                                    <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" title="please enter numbers only" pattern="[0-9]{3}-[0-9]{7}" />
+                                                    <input type="tel" id="contactNumber" class="form-control" placeholder=" Format: 332-4323914" title="please enter numbers only" pattern="[0-9]{3}-[0-9]{7}" />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -697,7 +738,6 @@
                     </div>
                     <!--------------------------------------------------------------------------------------------------------------------------------->
                     <!--------------------------------------------------------MODAL TO UPLOAD QUIZ----------------------------------------------------->
-
                     <div class="container">
                         <!-- The Modal -->
                         <div class="modal" id="uploadQuizModal">
@@ -729,7 +769,80 @@
                         </div>
                     </div>
                     <!--------------------------------------------------------------------------------------------------------------------------------->
+                    <!-- -------------------------------MODAL TO LET STUDENT DOWNLOAD VIDEOS----------------------------------------------------------->
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="downloadVideoModal">
+                            <div class="modal-dialog" style="width: auto">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Download</h4>
+                                        <button type="button" class="close" data-dismiss="modal" onclick="hide()">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div id="selectCourseDiv">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label>Choose Course: </label>
+                                                        <select id="chooseCourseForDownloadVideo" name="chooseCourseForDownloadVideo"></select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" onclick="displayTeachersForvideoDownload()">Select Course</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <br />
+                                        <div id="selectTeacherDiv">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label>Choose Teacher: </label>
+                                                        <select id="chooseTeacherForDownloadVideo" name="chooseTeacherForDownloadVideo"></select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" onclick="displayVideos()">Select Teacher</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div id="showVideosDiv">
+                                            <div class="table-responsive">
+                                                <table id="videosTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Video Name</th>
+                                                            <th>Video Link</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <%--                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Send()">Send</button>
+                                        </div>--%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-------------------------------------------------------------------------------------------------------->
+
                 </main>
+
             </div>
         </div>
     </form>

@@ -11,7 +11,17 @@ namespace CureUniveristy
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (Session["value"].ToString() != "1")
+                {
+                    Response.Redirect("Login_Page.aspx");
+                }
+            }
+            catch (Exception)
+            {
+                Response.Redirect("Login_Page.aspx");
+            }
         }
 
         [WebMethod(EnableSession = true)]
@@ -63,6 +73,18 @@ namespace CureUniveristy
         public static void TeacherBlockStudent(string teacher, string student)
         {
             new Bll().TeacherBlockStudent(teacher, student);
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static void TeacherUploadVideo(string email, string course, string link, string name)
+        {
+            new Bll().TeacherUploadVideo(email, course, link, name);
+        }
+
+        protected void LinkButton1_Click(object sender, EventArgs e)
+        {
+            Session["value"] = null;
+            Response.Redirect("Login_Page.aspx");
         }
     }
 }

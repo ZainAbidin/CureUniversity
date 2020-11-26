@@ -1,5 +1,6 @@
 ﻿using Classes;
 using DAL;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -63,6 +64,11 @@ namespace BLL
         public bool StudentRegisterCourse(string email, string course)
         {
             return (new Dal()).StudentRegisterCourse(email, course);
+        }
+
+        public object GetStudentByID(Func<string> email)
+        {
+            throw new NotImplementedException();
         }
 
         public int GetStudnetCreditHours(string email)
@@ -175,6 +181,16 @@ namespace BLL
         public void AdminSendMessage(string message, int schoolId)
         {
             new Dal().AdminSendMessage(message, schoolId);
+        }
+
+        public void TeacherUploadVideo(string email, string course, string link, string name)
+        {
+            new Dal().TeacherUploadVideo(email, course, link, name);
+        }
+
+        public DataTable StudentDownloadVideo(string course, string teacher)
+        {
+            return new Dal().StudentDownloadVideo(course, teacher);
         }
     }
 }

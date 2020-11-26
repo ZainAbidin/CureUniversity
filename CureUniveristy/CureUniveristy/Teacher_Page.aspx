@@ -33,6 +33,15 @@
                 font-size: 3.5rem;
             }
         }
+
+        html, body {
+            background-image: url("images/4.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100%;
+            font-family: 'Numans', sans-serif;
+        }
+
     </style>
     <script type="text/javascript">
         function Validation() {
@@ -75,84 +84,11 @@
         function CheckEmailAddress() {
             var emailAddress = document.getElementById('inputEmail');
             var exp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (exp.test(emailAddress.value)) {
+            if (exp.test(emailAddress.value)) 
                 return "";
-            }
-            else {
+            else
                 return "Email address typed is not in the correct format!\n";
-            }
-        }
 
-        function UpdateTeacherProfile() {
-
-            var userName = $('#userName').val();
-            var firstName = $('#firstName').val();
-            var lastName = $('#lastName').val();
-            var address = $('#address').val();
-            var email = $('#inputEmail').val();
-            var contactNumber = $('#contactNumber').val();
-            var reference = getUrlVars()["email"];
-            $.ajax({
-                type: "post",
-                url: "Teacher_Page.aspx/UpdateStudentProfile",
-                async: false,
-                data: JSON.stringify({ "reference": reference, "userName": userName, "firstName": firstName, "lastName": lastName, "address": address, "email": email, "contactNumber": contactNumber }),
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function (data) {
-                    if (data.d == false) {
-
-
-                        alert("Cannot update");
-
-                    }
-                    else if (data.d == true)
-                        alert("Profile Updated");
-
-                },
-                error: function () {
-                    alert("Failure");
-                }
-            })
-        }
-
-        function getUrlVars() {
-
-            //todo: userEmail
-            var vars = [], hash;
-            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-
-            for (var i = 0; i < hashes.length; i++) {
-
-                hash = hashes[i].split('=');
-                vars.push(hash[0]);
-                vars[hash[0]] = hash[1];
-            }
-
-            return vars;
-        }
-
-        function EditCourse() {
-            var selection = document.getElementById('displayCoursesId');
-            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
-
-            var courseName = $('#courseName').val();
-            var creditHours = $('#creditHours').val();
-
-            $.ajax({
-                url: 'Teacher_Page.aspx/EditCourse',
-                method: 'post',
-                dataType: 'json',
-                contentType: 'application/json',
-                async: false,
-                data: JSON.stringify({ "course": selectedCourse, "courseName": courseName, "creditHours": creditHours }),
-                success: function (data) {
-
-                },
-                error: function () {
-                    alert("failure");
-                }
-            })
         }
 
         $(document).ready(function () {
@@ -180,7 +116,8 @@
                         ],
                         searching: false,
                         bPaginate: false,
-                        bInfo: false
+                        bInfo: false,
+                        
                     });
                 }
 
@@ -197,11 +134,8 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var course = 0; course < good.length; course++) {
-
+                    for (var course = 0; course < good.length; course++) 
                         $('#displayCoursesId').append(new Option(good[course], course));
-
-                    }
                 }
             });
 
@@ -260,6 +194,75 @@
             });
         });
 
+        function UpdateTeacherProfile() {
+
+            var userName = $('#userName').val();
+            var firstName = $('#firstName').val();
+            var lastName = $('#lastName').val();
+            var address = $('#address').val();
+            var email = $('#inputEmail').val();
+            var contactNumber = $('#contactNumber').val();
+            var reference = getUrlVars()["email"];
+            $.ajax({
+                type: "post",
+                url: "Teacher_Page.aspx/UpdateStudentProfile",
+                async: false,
+                data: JSON.stringify({ "reference": reference, "userName": userName, "firstName": firstName, "lastName": lastName, "address": address, "email": email, "contactNumber": contactNumber }),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.d == false) 
+                        alert("Cannot update");
+
+                    else if (data.d == true)
+                        alert("Profile Updated");
+
+                },
+                error: function () {
+                    alert("Failure");
+                }
+            })
+        }
+
+        function getUrlVars() {
+
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+            for (var i = 0; i < hashes.length; i++) {
+
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+
+            return vars;
+        }
+
+        function EditCourse() {
+            var selection = document.getElementById('displayCoursesId');
+            var selectedCourse = selection.options[selection.selectedIndex].innerHTML;
+
+            var courseName = $('#courseName').val();
+            var creditHours = $('#creditHours').val();
+
+            $.ajax({
+                url: 'Teacher_Page.aspx/EditCourse',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "course": selectedCourse, "courseName": courseName, "creditHours": creditHours }),
+                success: function (data) {
+
+                },
+                error: function () {
+                    alert("failure");
+                }
+            })
+        }
+
         function UploadAssignmentScore() {
             var EMAIL = getUrlVars()["email"];
 
@@ -274,15 +277,53 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var course = 0; course < good.length; course++) {
-
+                    for (var course = 0; course < good.length; course++) 
                         $('#displayCoursesIdForScore').append(new Option(good[course], course));
-
-                    }
                 }
             });
 
 
+        }
+
+        function ShowCoursesForVideoUpload() {
+            var EMAIL = getUrlVars()["email"];
+
+            $.ajax({
+                url: 'Student_Page.aspx/DisplayRegisteredCourses',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL }),
+                success: function (data) {
+
+                    var good = JSON.parse(data.d);
+
+                    for (var course = 0; course < good.length; course++)
+                        $('#displayCoursesIdForVideo').append(new Option(good[course], course));
+                }
+            });
+        }
+
+        function UploadVideo() {
+            var EMAIL = getUrlVars()["email"];
+
+            var videoCourseSelection = document.getElementById('displayCoursesIdForVideo');
+            var course = videoCourseSelection.options[videoCourseSelection.selectedIndex].innerHTML;
+
+            var link = document.getElementById('videoLink').value;
+            var videoName = document.getElementById('videoName').value;
+
+            $.ajax({
+                url: 'Teacher_Page.aspx/TeacherUploadVideo',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                data: JSON.stringify({ "email": EMAIL, "course": course, "link": link, "name": videoName }),
+                success: function (data) {
+                }
+            });
         }
 
         function ShowAssignmentDiv() {
@@ -301,11 +342,8 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var assignment = 0; assignment < good.length; assignment++) {
-
+                    for (var assignment = 0; assignment < good.length; assignment++) 
                         $('#assignments').append(new Option(good[assignment], assignment));
-
-                    }
                 }
             });
 
@@ -349,7 +387,6 @@
                 success: function (data) {
 
                 }
-
             });
         }
 
@@ -366,7 +403,6 @@
                 success: function (data) {
 
                 }
-
             });
         }
 
@@ -384,7 +420,8 @@
             </button>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>
+                    <%--<a class="nav-link" href="Login_Page.aspx">Sign out</a>--%>
+                    <asp:LinkButton ID="LinkButton1" class="nav-link" runat="server" OnClick="LinkButton1_Click">Sign out</asp:LinkButton>
                 </li>
             </ul>
         </nav>
@@ -429,6 +466,12 @@
                                     Block Student
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="ShowCoursesForVideoUpload()" data-toggle="modal" data-target="#uploadVideoModal">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Upload Video Link
+                                </a>
+                            </li>
                         </ul>
 
                     </div>
@@ -455,9 +498,8 @@
                         <div>
                             <h3>Messages</h3>
                         </div>
-                        <%--<input type="text" id="message" name="message" style="border: hidden" />--%>
                         <div>
-                            <textarea rows="4" cols="50" id="message" name="message" <%--style="border: hidden"--%>></textarea>
+                            <textarea rows="4" cols="50" id="message" name="message"></textarea>
                         </div>
                     </div>
                     <!----------------------------------MODAL FOR UPDATE PROFILE---------------------------------------------->
@@ -529,8 +571,8 @@
                         </div>
 
                     </div>
-
                     <!-------------------------------------------------------------------------------------------------------->
+
                     <!-- -------------------------------MODAL FOR EDIT COURSE------------------------------------------------->
                     <div class="container">
                         <!-- The Modal -->
@@ -696,58 +738,114 @@
                                 </div>
                             </div>
                         </div>
-                        <!-------------------------------------------------------------------------------------------------------->
+                    </div>
+                    <!-------------------------------------------------------------------------------------------------------->
 
-                        <!-- -------------------------------MODAL FOR Blocking STUDENT---------------------------------->
-                        <div class="container">
-                            <!-- The Modal -->
-                            <div class="modal" id="blockingModal">
-                                <div class="modal-dialog" style="width: auto">
-                                    <div class="modal-content">
+                    <!-- -------------------------------MODAL FOR Blocking STUDENT-------------------------------------------->
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="blockingModal">
+                            <div class="modal-dialog" style="width: auto">
+                                <div class="modal-content">
 
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Block</h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        </div>
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Block</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
 
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            <div class="table-responsive">
-                                                <table id="registeredStudentForBlockTable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>School ID</th>
-                                                            <th>First Name</th>
-                                                            <th>Email</th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-                                            </div>
-                                            <br />
-                                            <div id="BlockDiv">
-                                                <table>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table id="registeredStudentForBlockTable">
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            <label>Block Student: </label>
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" id="blockID" style="width: 150px" />
-                                                        </td>
+                                                        <th>School ID</th>
+                                                        <th>First Name</th>
+                                                        <th>Email</th>
                                                     </tr>
-                                                </table>
-                                            </div>
-
-                                            <!-- Modal footer -->
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Block()">Block</button>
-                                            </div>
-
+                                                </thead>
+                                            </table>
                                         </div>
+                                        <br />
+                                        <div id="BlockDiv">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <label>Block Student: </label>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" id="blockID" style="width: 150px" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Block()">Block</button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                            <!-------------------------------------------------------------------------------------------------------->
+                        </div>
+                    </div>
+                    <!-------------------------------------------------------------------------------------------------------->
+
+                    <!----------------------------------MODAL FOR UPLOAD VIDEOS----------------------------------------------->
+                    <div class="container">
+                        <!-- The Modal -->
+                        <div class="modal" id="uploadVideoModal">
+                            <div class="modal-dialog" style="width: 500px">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Upload Video Link</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label>Select Course: </label>
+                                                    <select name="DisplayCourses" id="displayCoursesIdForVideo"></select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label>Paste Link: </label>
+                                                    <asp:TextBox ID="videoLink" runat="server" Style="width: 300px"></asp:TextBox>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label>Video Name: </label>
+                                                    <asp:TextBox ID="videoName" runat="server" Style="width: 300px"></asp:TextBox>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+
+                                    <!-- Modal footer -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="UploadVideo()">Upload</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-------------------------------------------------------------------------------------------------------->
                 </main>
             </div>
         </div>

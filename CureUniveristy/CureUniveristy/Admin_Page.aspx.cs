@@ -9,7 +9,15 @@ namespace CureUniveristy
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (Session["value"].ToString() != "2")                
+                    Response.Redirect("Login_Page.aspx");                
+            }
+            catch (Exception)
+            {
+                Response.Redirect("Login_Page.aspx");
+            }
         }
 
         [WebMethod(EnableSession = true)]
@@ -34,6 +42,12 @@ namespace CureUniveristy
         public static void sendMessage(string message, string schoolId)
         {
             new Bll().AdminSendMessage(message, Int32.Parse(schoolId));
+        }
+
+        protected void LinkButton1_Click(object sender, EventArgs e)
+        {
+            Session["value"] = null;
+            Response.Redirect("Login_Page.aspx");
         }
     }
 }

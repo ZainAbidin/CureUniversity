@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+
+        .carousel-inner img {
+            width: 100%;
+            height: 900px;
+        }
+
+
+
+        #slide_1, #slide_2, #slide_3 {
+            top: 50%;
+            transform: translateY(-30%);
+        }
+
+        #heading_1, #heading_2, #heading_3 {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <div id="demo" class="carousel slide carousel-fade" data-ride="carousel">
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="images/1.jpg" width="1100" height="500"/>
+                <div class="carousel-caption" id="slide_1">
+                    <h3>Space is completely silent</h3>
+                    <p>
+                        There is no atmosphere in space, which means that sound has<br />
+                        no medium or way to travel to be heard. Astronauts use radios<br />
+                        to stay in communication while in space, since radio waves can<br />
+                        still be sent and received.
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="images/2.jpg" width="1100" height="500"/>
+                <h2 class="carousel-caption" id="heading_2">
+                    Did you know?
+                </h2>
+                <div class="carousel-caption" id="slide_2">
+                    <h3>The hottest planet in our solar system is 450° C</h3>
+                    <p>
+                        Venus is the hottest planet in the solar system and has an average surface<br />
+                        temperature of around 450° C. Interestingly, Venus is not the closest planet<br />
+                        to the Sun – Mercury is closer but because Mercury has no atmosphere to regulate<br />
+                        temperature it has a very large temperature fluctuation.
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="images/3.jpg"  width="1100" height="500"/>
+                <h2 class="carousel-caption" id="heading_3">
+                    Did you know?
+                </h2>
+                <div class="carousel-caption" id="slide_3">
+                    <h3>Nobody knows how many stars are in space</h3>
+                    <p>
+                        The sheer size of space makes it impossible to accurately predict just how many<br />
+                        stars we have. Right now, scientists and astronomers use the number of stars only<br />
+                        within our galaxy, The Milky Way, to estimate. That number is between 200-400 billion<br />
+                        stars and there are estimated to be billions of galaxies so the stars in space really<br />
+                        are completely uncountable.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+
+
+
+</body>
+</html>

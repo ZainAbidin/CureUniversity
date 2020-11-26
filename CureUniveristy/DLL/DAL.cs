@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 namespace DAL
-{
+{ 
     public class Dal
     {
         string ConnectionString = ConfigurationManager.ConnectionStrings["CureUniversityConnectionString"].ConnectionString;
@@ -547,39 +547,7 @@ namespace DAL
             {
                 return assignments;
             }
-        }
-
-        //public List<Course> ShowAssignments(string email, string course)
-        //{
-        //    List<Course> courses = new List<Course>();
-        //    try
-        //    {
-        //        using (SqlConnection connection = new SqlConnection(ConnectionString))
-        //        {
-
-        //            SqlCommand cmnd = new SqlCommand("spShowAssignments", connection);
-        //            cmnd.CommandType = CommandType.StoredProcedure;
-        //            cmnd.Parameters.AddWithValue("@Email", email);
-        //            cmnd.Parameters.AddWithValue("@Course", course);
-        //            connection.Open();
-        //            SqlDataReader rdr = cmnd.ExecuteReader();
-        //            while (rdr.Read())
-        //            {
-
-        //                Course cours = new Course();
-        //                cours.assignment.name = rdr["Assignment_Name"].ToString();
-        //                courses.Add(cours);
-
-        //            }
-        //            return assignments;
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return assignments;
-
-        //    }
-        //}
+        }        
 
         public void UploadAssignmentScore(string email, string course, int score)
         {
@@ -701,7 +669,7 @@ namespace DAL
 
         public void AdminSendMessage(string message, int schoolId)
         {
-            //try
+            try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
@@ -713,9 +681,58 @@ namespace DAL
                     cmnd.ExecuteNonQuery();
                 }
             }
+            catch
+            {
+
+            }
+        }
+
+        public void TeacherUploadVideo(string email, string course, string link, string name)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spUploadVideo", connection);
+
+                    cmnd.CommandType = CommandType.StoredProcedure;
+                    cmnd.Parameters.AddWithValue("@Reference", email);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+                    cmnd.Parameters.AddWithValue("@Link", link);
+                    cmnd.Parameters.AddWithValue("@VideoName", name);
+                    connection.Open();
+                    cmnd.ExecuteNonQuery();
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        public DataTable StudentDownloadVideo(string course, string teacher)
+        {
+            DataTable dt = new DataTable();
+            //try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    SqlCommand cmnd = new SqlCommand("spDownloadVideo", connection);
+
+                    cmnd.CommandType = CommandType.StoredProcedure;
+
+                    cmnd.Parameters.AddWithValue("@Teacher", teacher);
+                    cmnd.Parameters.AddWithValue("@Course", course);
+
+                    connection.Open();
+                    SqlDataAdapter dataAdopter = new SqlDataAdapter(cmnd);
+                    dataAdopter.Fill(dt);
+                    return dt;
+                }
+            }
             //catch
             //{
-
+            //    return dt;
             //}
         }
     }

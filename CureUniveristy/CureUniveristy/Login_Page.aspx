@@ -16,75 +16,46 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $("#btnSignin").click(function () {
-
-                var email = $('#inputEmail').val();
-                var password = $('#inputPassword').val();
-
-                $.ajax({
-                    type: "post",
-                    url: "Login_Page.aspx/CheckCredentials",
-                    async: true,
-                    data: JSON.stringify({ "email": email, "password": password }),
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function (data) {
-
-                        if (data.d == 0)
-                            window.location.href = "Student_Page.aspx?email=" + email;
-
-                        else if (data.d == 1)
-                            window.location.href = "Teacher_Page.aspx?email=" + email;
-
-                        else if (data.d == 2)
-                            window.location.href = "Admin_Page.aspx?email=" + email;
-
-                        else
-                            alert("Wrong credentials or user not registered yet!");
-                    },
-                    error: function () {
-                        alert("Failure");
-                    }
-                })
-            });
-        });
-
-    </script>
+</script>
 </head>
 <body>
-    <div class="container">
-        <div class="d-flex justify-content-center h-100">
-            <div class="card h-auto">
-                <div class="card-header">
-                    <h3>Sign In</h3>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+
+        <div class="container">
+            <div class="d-flex justify-content-center h-100">
+                <div class="card h-auto">
+                    <div class="card-header">
+                        <h3>Sign In</h3>
+                    </div>
+                    <div class="card-body">
+                        <form runat="server">
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input runat="server" type="email" id="inputEmail" class="form-control" placeholder="email" required />
                             </div>
-                            <input type="email" id="inputEmail" class="form-control" placeholder="email" />
-                        </div>
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input runat="server" type="password" id="inputPassword" class="form-control" placeholder="password" required />
                             </div>
-                            <input type="password" id="inputPassword" class="form-control" placeholder="password"/>
+                            <div class="form-group">
+                                <asp:Button runat="server" class="btn btn-sm btn-primary btn-block" ID="loginButton" type="button" OnClick="LoginButton_Click" Text="Login"></asp:Button>
+                            </div>
+                            <div class="form-group">
+                                <asp:TextBox ID="Display" class="alert-danger" ReadOnly="true" runat="server"></asp:TextBox>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-center links">
+                            Don't have an account?<a href="Signup_Page.aspx">Sign Up</a>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" id="btnSignin" value="Login" class="btn float-right login_btn" />
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-center links">
-                        Don't have an account?<a href="Signup_Page.aspx">Sign Up</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
 </body>
 </html>

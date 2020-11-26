@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Web.Script.Serialization;
 using System.Web.Services;
-using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 
 
 namespace CureUniveristy
@@ -12,8 +12,21 @@ namespace CureUniveristy
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+  
+            try
+            {
+                if (Session["value"].ToString() != "0")
+                {
+                    Response.Redirect("Login_Page.aspx");
+                }
+            }
+            catch (Exception)
+            {
+                Response.Redirect("Login_Page.aspx");
+            }
 
         }
+
 
         public void UploadButton_Click(object sender, EventArgs e)
         {
@@ -27,8 +40,15 @@ namespace CureUniveristy
 
             BinaryReader br = new BinaryReader(fs);
             byte[] bytes = br.ReadBytes((Int32)fs.Length);
-
-            new Bll().AddAssignmnetToDatabase(email, course, FN, contentType, bytes);
+            string extension = Path.GetExtension(FileUpload1.PostedFile.FileName);
+            if(extension == ".pdf")
+            { 
+                new Bll().AddAssignmnetToDatabase(email, course, FN, contentType, bytes);
+              
+            }
+            else {
+                
+            }
 
         }
 
@@ -43,8 +63,10 @@ namespace CureUniveristy
             Stream fs = FileUpload2.PostedFile.InputStream;
             BinaryReader br = new BinaryReader(fs);
             byte[] bytes = br.ReadBytes((Int32)fs.Length);
-
-            new Bll().AddQuizToDatabase(email, course, FN, contentType, bytes);
+            string extension = Path.GetExtension(FileUpload2.PostedFile.FileName);
+            if (extension == ".pdf")
+                new Bll().AddQuizToDatabase(email, course, FN, contentType, bytes);
+            else { }
 
         }
 
@@ -53,6 +75,7 @@ namespace CureUniveristy
         {
             JavaScriptSerializer js = new JavaScriptSerializer();
             return js.Serialize((new Bll()).GetStudentByID(email));
+            
         }
 
         [WebMethod(EnableSession = true)]
@@ -112,5 +135,16 @@ namespace CureUniveristy
             return new Bll().DisplayMessages(email);
         }
 
+        [WebMethod(EnableSession = true)]
+        public static string DownloadVideo(string course, string teacher)
+        {
+            return JsonConvert.SerializeObject(new Bll().StudentDownloadVideo(course, teacher));
+        }
+
+        protected void LinkButton1_Click(object sender, EventArgs e)
+        {
+            Session["value"] = null;
+            Response.Redirect("Login_Page.aspx");
+        }
     }
 } 
