@@ -12,6 +12,14 @@
     <!--Custom styles-->
     <link href="Login_Page.css" rel="stylesheet" />
     <title></title>
+    <style>
+.trans
+{
+    background-color: rgba(0,0,0,0);
+    color:white;
+    border:none;
+}
+    </style>
     <script src="Scripts/jquery-3.3.1.js"></script>
 
     <script type="text/javascript">
@@ -44,7 +52,7 @@
                                 <asp:Button runat="server" class="btn btn-sm btn-primary btn-block" ID="loginButton" type="button" OnClick="LoginButton_Click" Text="Login"></asp:Button>
                             </div>
                             <div class="form-group">
-                                <asp:TextBox ID="Display" class="alert-danger" ReadOnly="true" runat="server"></asp:TextBox>
+                                <asp:TextBox ID="Display" class="trans"  ReadOnly="true" runat="server" ></asp:TextBox>
                             </div>
                         </form>
                     </div>

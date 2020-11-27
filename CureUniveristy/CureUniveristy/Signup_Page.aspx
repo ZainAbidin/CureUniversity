@@ -16,6 +16,7 @@
     <script src="Scripts/jquery-3.3.1.min.js"></script>
 
     <style>
+
     </style>
 
     <script type="text/javascript">
@@ -120,47 +121,47 @@
 
 </head>
 <body>
-    <div class="container" style="float:left" >
+    <div class="container" style="float: left">
         <div class="d-flex justify-content-center h-auto">
-            <div class="card h-auto" >
+            <div class="card h-auto">
                 <div class="card-header">
                     <h3>Sign Up</h3>
                 </div>
                 <div class="card-body">
                     <form>
 
-                        <label for="inputEmail" id = "colour">Email address</label>
+                        <label for="inputEmail" id="colour">Email address</label>
                         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
-                       
-                        <label for="fname" id = "colour">First Name</label>
+
+                        <label for="fname" id="colour">First Name</label>
                         <input type="text" id="firstName" class="form-control" placeholder="First Name" required />
-                        
-                        <label for="lname" id = "colour">Last Name</label>
+
+                        <label for="lname" id="colour">Last Name</label>
                         <input type="text" id="lastName" class="form-control" placeholder="Last Name" required />
-          
 
-                        <label for="phone" id = "colour">Phone Number</label>
+
+                        <label for="phone" id="colour">Phone Number</label>
                         <input type="tel" id="contactNumber" class="form-control" placeholder=" Phone number in format: 332-4323914" pattern="[0-9]{3}-[0-9]{7}" required />
-    
 
-                        <label for="quantity" id = "colour">School ID</label>
+
+                        <label for="quantity" id="colour">School ID</label>
                         <input type="number" id="schoolId" class="form-control" placeholder="School ID" name="quantity" min="1000" max="3999" required />
-           
 
-                        <label for="address" id = "colour">Address</label>
+
+                        <label for="address" id="colour">Address</label>
                         <input type="text" id="address" class="form-control" placeholder="Address" required />
-  
 
-                        <label for="username" id = "colour">Username</label>
+
+                        <label for="username" id="colour">Username</label>
                         <input type="text" id="userName" class="form-control" placeholder="UserName" required />
-        
 
-                        <label for="inputPassword" id = "colour">Password</label>
+
+                        <label for="inputPassword" id="colour">Password</label>
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required />
-   
-                        <label for="confirmPassword" id = "colour">Confirm Password</label>
+
+                        <label for="confirmPassword" id="colour">Confirm Password</label>
                         <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required />
-                <br />
+                        <br />
 
                         <button class="btn btn-lg btn-primary btn-block" id="btnSignUp" onclick="Validation()" type="submit">Sign UP</button>
                     </form>

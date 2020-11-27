@@ -179,7 +179,7 @@
                 type: "post",
                 url: "Admin_Page.aspx/sendMessage",
                 async: false,
-                data: JSON.stringify({ "schoolId": $('#schoolId').val(), "message": $('messageBox').val()}),
+                data: JSON.stringify({ "schoolId": $('#schoolId').val(), "message": $('#messageBox').val()}),
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {

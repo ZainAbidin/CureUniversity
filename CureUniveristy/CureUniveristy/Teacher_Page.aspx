@@ -34,6 +34,11 @@
             }
         }
 
+        .trans {
+            background-color: rgba(0,0,0,0);
+            color: white;
+        }
+
         html, body {
             background-image: url("images/4.jpg");
             background-size: cover;
@@ -41,7 +46,6 @@
             height: 100%;
             font-family: 'Numans', sans-serif;
         }
-
     </style>
     <script type="text/javascript">
         function Validation() {
@@ -84,7 +88,7 @@
         function CheckEmailAddress() {
             var emailAddress = document.getElementById('inputEmail');
             var exp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (exp.test(emailAddress.value)) 
+            if (exp.test(emailAddress.value))
                 return "";
             else
                 return "Email address typed is not in the correct format!\n";
@@ -117,7 +121,7 @@
                         searching: false,
                         bPaginate: false,
                         bInfo: false,
-                        
+
                     });
                 }
 
@@ -134,7 +138,7 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var course = 0; course < good.length; course++) 
+                    for (var course = 0; course < good.length; course++)
                         $('#displayCoursesId').append(new Option(good[course], course));
                 }
             });
@@ -212,7 +216,7 @@
                 dataType: 'json',
                 success: function (data) {
 
-                    if (data.d == false) 
+                    if (data.d == false)
                         alert("Cannot update");
 
                     else if (data.d == true)
@@ -277,7 +281,7 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var course = 0; course < good.length; course++) 
+                    for (var course = 0; course < good.length; course++)
                         $('#displayCoursesIdForScore').append(new Option(good[course], course));
                 }
             });
@@ -342,7 +346,7 @@
 
                     var good = JSON.parse(data.d);
 
-                    for (var assignment = 0; assignment < good.length; assignment++) 
+                    for (var assignment = 0; assignment < good.length; assignment++)
                         $('#assignments').append(new Option(good[assignment], assignment));
                 }
             });
@@ -499,7 +503,7 @@
                             <h3>Messages</h3>
                         </div>
                         <div>
-                            <textarea rows="4" cols="50" id="message" name="message"></textarea>
+                            <textarea rows="4" cols="50" id="message" name="message" class="trans" style="color:black" readonly></textarea>
                         </div>
                     </div>
                     <!----------------------------------MODAL FOR UPDATE PROFILE---------------------------------------------->

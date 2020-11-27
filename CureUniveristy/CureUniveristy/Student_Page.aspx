@@ -25,6 +25,11 @@
                 font-size: 3.5rem;
             }
         }
+
+        .trans {
+            background-color: rgba(0,0,0,0);
+            color: white;
+        }
     </style>
 
 
@@ -549,6 +554,12 @@
                                     Download Videos
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="https://www.facebook.com/">
+                                    <span data-feather="bar-chart-2"></span>
+                                    Share Certificate
+                                </a>
+                            </li>
                         </ul>
 
                     </div>
@@ -575,7 +586,7 @@
                     <div>
                         <div>
                             <h3>Messages</h3>
-                            <textarea rows="4" cols="50" id="message" name="message"></textarea>
+                            <textarea rows="4" cols="50" id="message" name="message" class="trans" style="color: black" readonly></textarea>
                         </div>
                     </div>
                     <!--------------------------------------------------------MODAL TO UPDATE PROFILE------------------------------------------------->
@@ -668,7 +679,7 @@
                                     <div class="modal-body">
 
                                         <label>Number of credits registered: </label>
-                                        <asp:TextBox ID="noOfCreditsRegistered" runat="server">No Of credits registered</asp:TextBox>
+                                        <asp:TextBox ID="noOfCreditsRegistered" runat="server" ReadOnly>No Of credits registered</asp:TextBox>
                                         <select name="DisplayCourses" id="displayCoursesId"></select>
 
                                         <div id="displayTeacher">
