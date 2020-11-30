@@ -27,7 +27,6 @@ namespace CureUniveristy
 
         }
 
-
         public void UploadButton_Click(object sender, EventArgs e)
         {
             string FN = "";
@@ -68,6 +67,12 @@ namespace CureUniveristy
                 new Bll().AddQuizToDatabase(email, course, FN, contentType, bytes);
             else { }
 
+        }
+
+        protected void LinkButton1_Click(object sender, EventArgs e)
+        {
+            Session["value"] = null;
+            Response.Redirect("Login_Page.aspx");
         }
 
         [WebMethod(EnableSession = true)]
@@ -141,10 +146,5 @@ namespace CureUniveristy
             return JsonConvert.SerializeObject(new Bll().StudentDownloadVideo(course, teacher));
         }
 
-        protected void LinkButton1_Click(object sender, EventArgs e)
-        {
-            Session["value"] = null;
-            Response.Redirect("Login_Page.aspx");
-        }
     }
 } 

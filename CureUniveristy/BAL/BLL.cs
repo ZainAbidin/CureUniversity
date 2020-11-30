@@ -140,18 +140,6 @@ namespace BLL
             return compiledList;
         }
 
-        //public List<string> ShowAssignments(string email, string course)
-        //{
-        //    List<Course> assignmentList = new List<Course>();
-        //    List<string> compiledList = new List<string>();
-
-        //    assignmentList = new Dal().ShowAssignments(email, course);
-        //    foreach (var assignment in assignmentList)
-        //    {
-        //        compiledList.Add(assignment.name);
-        //    }
-        //    return compiledList;
-        //}
 
         public void UploadAssignmentScore(string email, string course, int score)
         {

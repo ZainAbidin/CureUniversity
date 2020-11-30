@@ -6,6 +6,8 @@
 <head runat="server">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="Scripts/jquery-3.3.1.js"></script>
+    <script src="Scripts/notify.min.js"></script>
+    <script src="Scripts/notify.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <!--Bootsrap 4 CDN-->
@@ -54,7 +56,8 @@
             errors += CheckUsername();
             errors += CheckEmailAddress();
             if (errors != "") {
-                alert(errors);
+                $.notify(errors);
+
                 return false;
             }
             UpdateTeacherProfile();
@@ -217,14 +220,14 @@
                 success: function (data) {
 
                     if (data.d == false)
-                        alert("Cannot update");
+                        $.notify('Cannot Update');
 
                     else if (data.d == true)
-                        alert("Profile Updated");
+                        $.notify('Profile update');
 
                 },
                 error: function () {
-                    alert("Failure");
+                    $.notify('Failure');
                 }
             })
         }
@@ -259,10 +262,10 @@
                 async: false,
                 data: JSON.stringify({ "course": selectedCourse, "courseName": courseName, "creditHours": creditHours }),
                 success: function (data) {
-
+                    $.notify('Edit Successful');
                 },
                 error: function () {
-                    alert("failure");
+                    $.notify('Failure');
                 }
             })
         }
@@ -326,6 +329,7 @@
                 async: false,
                 data: JSON.stringify({ "email": EMAIL, "course": course, "link": link, "name": videoName }),
                 success: function (data) {
+                    $.notify('Video Uploaded');
                 }
             });
         }
@@ -370,7 +374,7 @@
                 async: false,
                 data: JSON.stringify({ "email": EMAIL, "score": score, "course": course }),
                 success: function (data) {
-
+                    $.notify('Score Uploaded');
                 }
 
             });
@@ -389,7 +393,7 @@
                 async: false,
                 data: JSON.stringify({ "email": email, "reference": reference, "message": message }),
                 success: function (data) {
-
+                    $.notify('Message Sent');
                 }
             });
         }
@@ -405,7 +409,7 @@
                 async: false,
                 data: JSON.stringify({ "student": student, "teacher": teacher }),
                 success: function (data) {
-
+                    $.notify('Blocked');
                 }
             });
         }
@@ -503,7 +507,7 @@
                             <h3>Messages</h3>
                         </div>
                         <div>
-                            <textarea rows="4" cols="50" id="message" name="message" class="trans" style="color:black" readonly></textarea>
+                            <textarea rows="4" cols="50" id="message" name="message" class="trans" style="color: black" readonly></textarea>
                         </div>
                     </div>
                     <!----------------------------------MODAL FOR UPDATE PROFILE---------------------------------------------->

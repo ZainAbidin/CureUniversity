@@ -7,6 +7,8 @@
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="Scripts/jquery-3.3.1.js"></script>
+    <script src="Scripts/notify.js"></script>
+    <script src="Scripts/notify.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <!--Bootsrap 4 CDN-->
@@ -18,7 +20,7 @@
     <link href="dashboard.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="Scripts/notify.js"></script>
     <style>
         html, body {
             background-image: url("images/page.jpg");
@@ -132,17 +134,15 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.d == false) {
-
-
-                        alert("update");
+                        $.notify('Update Successful', 'info');
 
                     }
                     else if (data.d == true)
-                        alert("not Updated");
+                        $.notify('Update failed');
 
                 },
                 error: function () {
-                    alert("Failure");
+                    $.notify('Update failed');
                 }
             })
 
@@ -160,16 +160,15 @@
                 success: function (data) {
                     if (data.d == false) {
 
-
-                        alert("update");
+                        $.notify('Update Successful', 'info');
 
                     }
                     else if (data.d == true)
-                        alert("not Updated");
+                        $.notify('Update Failed');
 
                 },
                 error: function () {
-                    alert("Failure");
+                    $.notify('Update Failed');
                 }
             })
 
@@ -179,14 +178,14 @@
                 type: "post",
                 url: "Admin_Page.aspx/sendMessage",
                 async: false,
-                data: JSON.stringify({ "schoolId": $('#schoolId').val(), "message": $('#messageBox').val()}),
+                data: JSON.stringify({ "schoolId": $('#schoolId').val(), "message": $('#messageBox').val() }),
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (data) {
 
                 },
                 error: function () {
-                    alert("Failure");
+                    $.notify('Update Failed');
                 }
             })
         }
@@ -203,7 +202,7 @@
             </button>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
-<%--                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>--%>
+                    <%--                    <a class="nav-link" href="Login_Page.aspx">Sign out</a>--%>
                     <asp:LinkButton ID="LinkButton1" class="nav-link" runat="server" OnClick="LinkButton1_Click">Sign out</asp:LinkButton>
                 </li>
             </ul>

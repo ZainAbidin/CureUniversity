@@ -35,7 +35,11 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script src="Scripts/jquery-3.3.1.js"></script>
+    <script src="Scripts/notify.min.js"></script>
+
+    <script src="Scripts/notify.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <!--Bootsrap 4 CDN-->
@@ -62,7 +66,8 @@
             errors += CheckUsername();
             errors += CheckEmailAddress();
             if (errors != "") {
-                alert(errors);
+                $.notify(errors,'error');
+                //alert(errors);
                 return false;
             }
             UpdateStudentProfile();
@@ -75,6 +80,7 @@
             var exp = /^[a-zA-Z]+$/
             if ((exp.test(FName.value)) && (exp.test(LName.value))) {
                 return "";
+
             }
             else {
                 return 'Name can Only have alphabets!!\n'
@@ -124,16 +130,20 @@
                 success: function (data) {
                     if (data.d == false) {
 
+                        $.notify('Cannot update','warn');
+                        //alert("Cannot update");
 
-                        alert("Cannot update");
+
 
                     }
                     else if (data.d == true)
-                        alert("Profile Updated");
+                        $.notify('Profile update','success');
+                    //alert("Profile Updated");
 
                 },
                 error: function () {
-                    alert("Failure");
+
+                    $.notify('Failure','error');
                 }
             })
         }
@@ -232,7 +242,8 @@
 
         function displaysuccess() {
 
-            alert("You have been Registered successfully");
+
+            $.notify('You have been Registered successfully','success');
 
             var selection = document.getElementById('displayCoursesId');
 
@@ -308,19 +319,21 @@
 
                                 if (data.d == false) {
 
-                                    alert("Already Registered in this Course");
+
+                                    $.notify('Already Registered in this Course','info');
                                     document.getElementById("noOfCreditsRegistered").value = parseInt(document.getElementById("noOfCreditsRegistered").value) - parseInt(credits[0]);
                                 }
                                 else if (data.d == true)
                                     $("#displayTeacher").show();
                             },
                             error: function () {
-                                alert("Failure");
+                                $.notify('Failure','error');
                             }
                         })
                     }
                     else
-                        alert("You cannot register another course");
+
+                        $.notify('You cannot register another course','info');
                 }
 
                 else {
@@ -335,12 +348,12 @@
                         success: function (data) {
 
                             if (data.d == false)
-                                alert("Already Registered in this Course");
+                                $.notify('Already registered in this Course','info');
                             else if (data.d == true)
                                 $("#displayTeacher").show();
                         },
                         error: function () {
-                            alert("Failure");
+                            $.notify('Failure','info');
                         }
                     })
                 }
@@ -491,7 +504,6 @@
         function hide() {
             $("#showVideosDiv").hide();
             $("#selectTeacherDiv").hide();
-            nullifySelects();
         }
 
 
@@ -773,7 +785,7 @@
 
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
-                                        <asp:Button runat="server" ID="Button1" class="btn btn-danger" data-dismiss="modal" UseSubmitBehavior="false" Text="Upload" OnClick="UploadButton_Click1" />
+                                        <asp:Button runat="server" ID="Button1" class="btn btn-danger" data-dismiss="modal" UseSubmitBehavior="false" Text="Upload" OnClick="UploadButton_Click1"/>
                                     </div>
                                 </div>
                             </div>

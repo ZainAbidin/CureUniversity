@@ -21,7 +21,6 @@
 }
     </style>
     <script src="Scripts/jquery-3.3.1.js"></script>
-
     <script type="text/javascript">
 
 </script>
